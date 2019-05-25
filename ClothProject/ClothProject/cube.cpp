@@ -1,7 +1,7 @@
 #include "cube.h"
 #include "cubemap.h"
 
-Cube::Cube(Level * level, Terrain * _terrain)
+Cube::Cube(Level * level, PhysicsManager* _physicsManager, Terrain * _terrain)
 {
 	this->level = level;
 	VBO = level->GetVBO();
@@ -13,6 +13,7 @@ Cube::Cube(Level * level, Terrain * _terrain)
 	vecTexts = level->GetVecTexts();
 	clock = level->GetClock();
 	terrain = _terrain;
+	physics = _physicsManager;
 	xRot = 0.0f;
 	yRot = 1.0f;
 	zRot = 0.0f;
@@ -31,15 +32,55 @@ void Cube::Initialise()
 
 	model = new Model("Assets/CubeModel.obj", this);
 	stencil = new  Model("Assets/StencilModel.obj", this);
+	
+	//Physics
+	colShape = new btBoxShape(btVector3(4.0f, 4.0f, 4.0f));
+	physics->GetCollisionShapes()->push_back(colShape);
+
+	btTransform startTransform;
+	startTransform.setIdentity();
+
+	btScalar mass(1.0f);
+
+	bool isDynamic = (mass != 0.0f);
+
+	btVector3 localInertia;
+	colShape->calculateLocalInertia(mass, localInertia);
+
+	startTransform.setOrigin(btVector3(0.0f, 50.0f, 0.0f));
+
+	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
+
+	body = new btRigidBody(rbInfo);
+
+	physics->GetWorld()->addRigidBody(body);
 }
 
 void Cube::Update(double dTime)
 {
+	body->applyTorque(btVector3(5.0f, 20.0f, 0.0f));
+	//body->applyCentralForce(btVector3(20.0f, 0.0f, 0.0f));
+
+	btTransform trans;
+	body->getMotionState()->getWorldTransform(trans);
+
+	btVector3 pos = trans.getOrigin();
+	btQuaternion rotation = trans.getRotation();
+	btVector3 rotationAxis = rotation.getAxis();
+
+	x = pos.getX();
+	y = pos.getY();
+	z = pos.getZ();
+
+	xRot = rotationAxis.getX();
+	yRot = rotationAxis.getY();
+	zRot = rotationAxis.getZ();
+	rotationAngle = Utils::RadToDeg(rotation.getAngle());
+
 	deltaTime = (float)dTime;
 	model->Update(deltaTime);
 	stencil->Update(deltaTime);
-
-	ProcessInput(dTime);
 }
 
 void Cube::Draw()
@@ -66,33 +107,4 @@ void Cube::Draw()
 	//Disable writing to stencil mask
 	glStencilMask(0x00);
 	glDisable(GL_STENCIL_TEST);
-}
-
-void Cube::ProcessInput(double dTime)
-{
-	float speed = 40.0f;
-
-	if (inputManager->GetKeyState('w') == KEY_DOWN || inputManager->GetKeyState('W') == KEY_DOWN)
-	{
-		z -= speed * (float)dTime;
-	}
-	else if (inputManager->GetKeyState('s') == KEY_DOWN || inputManager->GetKeyState('S') == KEY_DOWN)
-	{
-		z += speed * (float)dTime;
-	}
-
-	if (inputManager->GetKeyState('a') == KEY_DOWN || inputManager->GetKeyState('A') == KEY_DOWN)
-	{
-		x -= speed * (float)dTime;
-	}
-	else if (inputManager->GetKeyState('d') == KEY_DOWN || inputManager->GetKeyState('D') == KEY_DOWN)
-	{
-		x += speed * (float)dTime;
-	}
-
-	x = Utils::Clamp(x, -250.0f, 250.0f);
-	z = Utils::Clamp(z, -250.0f, 250.0f);
-
-	//Snapping to height of the terrain
-	y = terrain->GetHeight(x,z) + 2.0f;
 }

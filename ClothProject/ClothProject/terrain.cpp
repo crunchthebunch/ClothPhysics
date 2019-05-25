@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 
-Terrain::Terrain(Level * _level, const char * _heightMapPath, const char* _texPath, const char* _texName, int _quality)
+Terrain::Terrain(Level * _level, PhysicsManager* _physicsManager, const char * _heightMapPath, const char* _texPath, const char* _texName, int _quality)
 {
 	level = _level;
 	camera = level->GetCamera();
@@ -12,13 +12,14 @@ Terrain::Terrain(Level * _level, const char * _heightMapPath, const char* _texPa
 	skyBoxTexture = level->GetSkyBox()->GetTexture();
 	clock = level->GetClock();
 	VBO = level->GetVBO();
+	physics = _physicsManager;
 	heightMapPath = _heightMapPath;
 	texturePath = _texPath;
 	textureName = _texName;
 	quality = _quality;
 	numRows = 513;
 	numCols = 513;
-	heightScale = 0.02f;
+	heightScale = 0.015f;
 	heightOffset = 0.0f;
 	cellSpacing = 0.5f;
 	ambientStr = 0.25f;
@@ -76,6 +77,9 @@ void Terrain::Initialise()
 	lightColorLoc = glGetUniformLocation(program, "lightColor");
 	lightPosLoc = glGetUniformLocation(program, "lightPos");
 	camPosLoc = glGetUniformLocation(program, "camPos");
+
+	//Initialise physics ground plane
+	InitPhysics();
 }
 
 void Terrain::Update(double dTime)
@@ -161,8 +165,27 @@ void Terrain::Draw()
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+}
 
+void Terrain::InitPhysics()
+{
+	btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(50.), btScalar(50.), btScalar(50.)));
 
+	physics->GetCollisionShapes()->push_back(groundShape);
+
+	btTransform groundTransform;
+	groundTransform.setIdentity();
+	groundTransform.setOrigin(btVector3(0.0f, -50.0f, 0.0f));
+
+	btScalar mass(0.0f);
+
+	btVector3 localInertia(0.0f, 0.0f, 0.0f);
+
+	btDefaultMotionState* myMotionState = new btDefaultMotionState(groundTransform);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, groundShape, localInertia);
+	btRigidBody* body = new btRigidBody(rbInfo);
+
+	physics->GetWorld()->addRigidBody(body);
 }
 
 void Terrain::BuildVertices()

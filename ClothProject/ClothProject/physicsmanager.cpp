@@ -6,12 +6,54 @@ PhysicsManager::PhysicsManager()
 
 PhysicsManager::~PhysicsManager()
 {
+	for (int i = world->getNumCollisionObjects() - 1; i >= 0; i--)
+	{
+		btCollisionObject* obj = world->getCollisionObjectArray()[i];
+		btRigidBody* body = btRigidBody::upcast(obj);
+		if (body && body->getMotionState())
+		{
+			delete body->getMotionState();
+		}
+		world->removeCollisionObject(obj);
+		delete obj;
+	}
+
+	for (int j = 0; j < collisionShapes.size(); j++)
+	{
+		btCollisionShape* shape = collisionShapes[j];
+		collisionShapes[j] = 0;
+		delete shape;
+	}
+
+	delete collisionConfig;
+	delete collisionDispatcher;
+	delete broadphaseInterface;
+	delete solver;
+	delete world;
 }
 
 void PhysicsManager::Initialise()
 {
+	collisionConfig = new btDefaultCollisionConfiguration();
+	collisionDispatcher = new btCollisionDispatcher(collisionConfig);
+	broadphaseInterface = new btDbvtBroadphase();
+	solver = new btSequentialImpulseConstraintSolver;
+	world = new btSimpleDynamicsWorld(collisionDispatcher, broadphaseInterface, solver, collisionConfig);
+
+	world->setGravity(btVector3(0.0f, -10.0f, 0.0f));
 }
 
 void PhysicsManager::Update(double _dTime)
 {
+	world->stepSimulation((btScalar)_dTime, 10);
+}
+
+btAlignedObjectArray<btCollisionShape*>* PhysicsManager::GetCollisionShapes()
+{
+	return &collisionShapes;
+}
+
+btDynamicsWorld * PhysicsManager::GetWorld()
+{
+	return world;
 }

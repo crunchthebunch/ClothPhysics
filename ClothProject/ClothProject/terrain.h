@@ -1,6 +1,7 @@
 #pragma once
 #include "sprite.h"
 #include "level.h"
+#include "physicsmanager.h"
 
 struct TerrainVertex
 {
@@ -12,7 +13,7 @@ struct TerrainVertex
 class Terrain : public GameObject
 {
 public:
-	Terrain(Level* _level, const char* _heightMap, const char* _texPath, const char* _texName, int _quality);
+	Terrain(Level* _level, PhysicsManager* _physicsManager, const char* _heightMap, const char* _texPath, const char* _texName, int _quality);
 	virtual ~Terrain();
 
 	virtual void Initialise();
@@ -30,6 +31,7 @@ public:
 	int GetNumCols() const;
 
 private:
+	void InitPhysics();
 	void BuildVertices();
 	void BuildIndices();
 	void LoadHeightmap();
@@ -55,6 +57,8 @@ private:
 	float cellSpacing;
 	float heightScale;
 	float heightOffset;
+
+	PhysicsManager* physics;
 
 private:
 	GLuint VAO;

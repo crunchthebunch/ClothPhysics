@@ -1,5 +1,5 @@
 #include "game.h"
-#include "graphicslevel.h"
+#include "physicslevel.h"
 
 // Static Variables
 Game* Game::currentGame = 0;
@@ -32,7 +32,7 @@ void Game::Initialise(int _width, int _height)
 
 	inputManager = new InputManager();
 
-	currentLevel = new GraphicsLevel();
+	currentLevel = new PhysicsLevel();
 	currentLevel->Initialise(this, shaderLoader, textureLoader, inputManager);
 	vecLevels.push_back(currentLevel);
 }
