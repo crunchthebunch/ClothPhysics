@@ -6,8 +6,8 @@ Cloth::Cloth(Level * _level, PhysicsManager * _physicsManager)
 	physics = _physicsManager;
 	width = 32.0f;
 	height = 32.0f;
-	numRows = 4;
-	numCols = 4;
+	numRows = 8;
+	numCols = 8;
 	cellSpacing = width/numCols;
 }
 

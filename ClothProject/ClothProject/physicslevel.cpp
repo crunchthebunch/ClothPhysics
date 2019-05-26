@@ -126,11 +126,11 @@ void PhysicsLevel::Initialise(Game * _myGame, ShaderLoader * _shaderloader, Asse
 	vecObjects.push_back(grass);
 
 	//Init Cube
-	//cube = new Cube(this, physicsManager, terrain);
-	//cube->SetY(20.0f);
-	//cube->Initialise();
-	//vecObjects.push_back(cube);
-	//vecPickable.push_back(cube);
+	cube = new Cube(this, physicsManager, terrain);
+	cube->SetY(20.0f);
+	cube->Initialise();
+	vecObjects.push_back(cube);
+	vecPickable.push_back(cube);
 
 	//Init Cloth
 	Cloth* cloth = new Cloth(this, physicsManager);
