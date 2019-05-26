@@ -5,6 +5,7 @@
 #include "terrain.h"
 #include "grass.h"
 #include "physicsmanager.h"
+#include "cloth.h"
 
 PhysicsLevel::PhysicsLevel()
 {
@@ -77,7 +78,7 @@ void PhysicsLevel::Initialise(Game * _myGame, ShaderLoader * _shaderloader, Asse
 
 	//Init Camera
 	levelCamera = new Camera();
-	levelCamera->SetCamPos(glm::vec3(0.0f,25.0f,50.0f));
+	levelCamera->SetCamPos(glm::vec3(0.0f,20.0f,50.0f));
 
 	//Init Mouse Picker
 	mousePicker = new MousePicker(this, &vecPickable);
@@ -125,10 +126,18 @@ void PhysicsLevel::Initialise(Game * _myGame, ShaderLoader * _shaderloader, Asse
 	vecObjects.push_back(grass);
 
 	//Init Cube
-	cube = new Cube(this, physicsManager, terrain);
-	cube->Initialise();
-	vecObjects.push_back(cube);
-	vecPickable.push_back(cube);
+	//cube = new Cube(this, physicsManager, terrain);
+	//cube->SetY(20.0f);
+	//cube->Initialise();
+	//vecObjects.push_back(cube);
+	//vecPickable.push_back(cube);
+
+	//Init Cloth
+	Cloth* cloth = new Cloth(this, physicsManager);
+	cloth->SetY(50.0f);
+	cloth->SetX(1.0f);
+	cloth->Initialise();
+	vecObjects.push_back(cloth);
 
 	isInit = true;
 }
@@ -166,19 +175,7 @@ void PhysicsLevel::Update()
 	screenQuad->Update(deltaTime);
 
 	//Update Mouse Picker
-	mousePicker->UpdateMousePicker();
-
-	if (mousePicker->CheckMouseCollision())
-	{
-		if (mousePicker->GetPickedObject() == cube)
-		{
-			text->SetText("Cube");
-		}
-	}
-	else
-	{
-		text->SetText("");
-	}
+	MousePicking();
 
 	static bool wToggle = true;
 	static float wToggleDelay = 0.0f;
@@ -301,23 +298,50 @@ void PhysicsLevel::ControlCamera()
 
 	glm::vec3 camMovement = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	if (inputManager->GetArrowState(DIR_UP) == KEY_DOWN)
+	if (inputManager->GetKeyState('w') == KEY_DOWN)
 	{
 		camMovement.z -= camSpeed * deltaTime;
 	}
-	else if (inputManager->GetArrowState(DIR_DOWN) == KEY_DOWN)
+	else if (inputManager->GetKeyState('s') == KEY_DOWN)
 	{
 		camMovement.z += camSpeed * deltaTime;
 	}
 
-	if (inputManager->GetArrowState(DIR_RIGHT) == KEY_DOWN)
+	if (inputManager->GetKeyState('d') == KEY_DOWN)
 	{
 		camMovement.x += camSpeed * deltaTime;
 	}
-	else if (inputManager->GetArrowState(DIR_LEFT) == KEY_DOWN)
+	else if (inputManager->GetKeyState('a') == KEY_DOWN)
 	{
 		camMovement.x -= camSpeed * deltaTime;
 	}
 
 	levelCamera->SetCamPos(levelCamera->GetCamPos() + camMovement);
+}
+
+void PhysicsLevel::MousePicking()
+{
+	mousePicker->UpdateMousePicker();
+	if (mousePicker->CheckMouseCollision())
+	{
+		std::vector<GameObject*>::iterator it;
+		for (it = vecPickable.begin(); it != vecPickable.end(); it++)
+		{
+			GameObject* obj = *it;
+
+			if (mousePicker->GetPickedObject() == obj)
+			{
+				text->SetText("PICK UP");
+
+				if (inputManager->GetMouseState(MOUSE_LEFT) == KEY_DOWN)
+				{
+					obj->MousePressing();
+				}
+			}
+		}
+	}
+	else
+	{
+		text->SetText("");
+	}
 }

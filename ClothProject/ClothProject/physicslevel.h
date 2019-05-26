@@ -15,7 +15,9 @@ public:
 	virtual void Update();
 	virtual void Draw();
 
-	virtual void ControlCamera();
+	void ControlCamera();
+
+	void MousePicking();
 
 private:
 	PhysicsManager* physicsManager;

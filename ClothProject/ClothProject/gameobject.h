@@ -94,6 +94,10 @@ public:
 	int GetScreenX() const;
 	int GetScreenY() const;
 
+	//Mousepicking
+	virtual void MouseHover();
+	virtual void MousePressing();
+
 protected:
 	float x;
 	float y;

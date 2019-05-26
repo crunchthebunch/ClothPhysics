@@ -34,13 +34,17 @@ PhysicsManager::~PhysicsManager()
 
 void PhysicsManager::Initialise()
 {
-	collisionConfig = new btDefaultCollisionConfiguration();
+	collisionConfig = new btSoftBodyRigidBodyCollisionConfiguration();
 	collisionDispatcher = new btCollisionDispatcher(collisionConfig);
 	broadphaseInterface = new btDbvtBroadphase();
 	solver = new btSequentialImpulseConstraintSolver;
-	world = new btSimpleDynamicsWorld(collisionDispatcher, broadphaseInterface, solver, collisionConfig);
-
+	world = new btSoftRigidDynamicsWorld(collisionDispatcher, broadphaseInterface, solver, collisionConfig);
 	world->setGravity(btVector3(0.0f, -10.0f, 0.0f));
+
+	softInfo.m_broadphase = broadphaseInterface;
+	softInfo.m_dispatcher = collisionDispatcher;
+	softInfo.m_gravity = world->getGravity();
+	softInfo.m_sparsesdf.Initialize();
 }
 
 void PhysicsManager::Update(double _dTime)
@@ -53,7 +57,12 @@ btAlignedObjectArray<btCollisionShape*>* PhysicsManager::GetCollisionShapes()
 	return &collisionShapes;
 }
 
-btDynamicsWorld * PhysicsManager::GetWorld()
+btSoftRigidDynamicsWorld * PhysicsManager::GetWorld()
 {
 	return world;
+}
+
+btSoftBodyWorldInfo PhysicsManager::GetSoftInfo() const
+{
+	return softInfo;
 }

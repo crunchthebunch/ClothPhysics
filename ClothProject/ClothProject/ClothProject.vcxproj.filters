@@ -543,6 +543,42 @@
     <ClCompile Include="physicsmanager.cpp">
       <Filter>Source Files\ClothProject</Filter>
     </ClCompile>
+    <ClCompile Include="Dependencies\bullet\src\BulletSoftBody\btDefaultSoftBodySolver.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\bullet\src\BulletSoftBody\btSoftBody.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\bullet\src\BulletSoftBody\btSoftBodyConcaveCollisionAlgorithm.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\bullet\src\BulletSoftBody\btSoftBodyHelpers.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\bullet\src\BulletSoftBody\btSoftBodyRigidBodyCollisionConfiguration.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\bullet\src\BulletSoftBody\btSoftMultiBodyDynamicsWorld.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\bullet\src\BulletSoftBody\btSoftRigidCollisionAlgorithm.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\bullet\src\BulletSoftBody\btSoftRigidDynamicsWorld.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\bullet\src\BulletSoftBody\btSoftSoftCollisionAlgorithm.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="meshsphere.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="cloth.cpp">
+      <Filter>Source Files\ClothProject</Filter>
+    </ClCompile>
+    <ClCompile Include="clothpart.cpp">
+      <Filter>Source Files\ClothProject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assetloader.h">
@@ -1300,6 +1336,54 @@
     </ClInclude>
     <ClInclude Include="Dependencies\bullet\src\btBulletCollisionCommon.h">
       <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="cloth.h">
+      <Filter>Header Files\ClothProject</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\bullet\src\BulletSoftBody\btDefaultSoftBodySolver.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\bullet\src\BulletSoftBody\btSoftBody.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\bullet\src\BulletSoftBody\btSoftBodyConcaveCollisionAlgorithm.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\bullet\src\BulletSoftBody\btSoftBodyData.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\bullet\src\BulletSoftBody\btSoftBodyHelpers.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\bullet\src\BulletSoftBody\btSoftBodyInternals.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\bullet\src\BulletSoftBody\btSoftBodyRigidBodyCollisionConfiguration.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\bullet\src\BulletSoftBody\btSoftBodySolvers.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\bullet\src\BulletSoftBody\btSoftBodySolverVertexBuffer.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\bullet\src\BulletSoftBody\btSoftMultiBodyDynamicsWorld.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\bullet\src\BulletSoftBody\btSoftRigidCollisionAlgorithm.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\bullet\src\BulletSoftBody\btSoftRigidDynamicsWorld.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\bullet\src\BulletSoftBody\btSoftSoftCollisionAlgorithm.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\bullet\src\BulletSoftBody\btSparseSDF.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="clothpart.h">
+      <Filter>Header Files\ClothProject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

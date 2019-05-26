@@ -1,9 +1,9 @@
 #include "cube.h"
 #include "cubemap.h"
 
-Cube::Cube(Level * level, PhysicsManager* _physicsManager, Terrain * _terrain)
+Cube::Cube(Level * _level, PhysicsManager* _physicsManager, Terrain * _terrain)
 {
-	this->level = level;
+	this->level = _level;
 	VBO = level->GetVBO();
 	camera = level->GetCamera();
 	inputManager = level->GetInputManager();
@@ -18,6 +18,8 @@ Cube::Cube(Level * level, PhysicsManager* _physicsManager, Terrain * _terrain)
 	yRot = 1.0f;
 	zRot = 0.0f;
 	rotationAngle = 0.0f;
+
+	isHeld = false;
 }
 
 Cube::~Cube()
@@ -34,7 +36,7 @@ void Cube::Initialise()
 	stencil = new  Model("Assets/StencilModel.obj", this);
 	
 	//Physics
-	colShape = new btBoxShape(btVector3(4.0f, 4.0f, 4.0f));
+	colShape = new btBoxShape(btVector3(3.0f, 3.0f, 3.0f));
 	physics->GetCollisionShapes()->push_back(colShape);
 
 	btTransform startTransform;
@@ -42,12 +44,10 @@ void Cube::Initialise()
 
 	btScalar mass(1.0f);
 
-	bool isDynamic = (mass != 0.0f);
-
 	btVector3 localInertia;
 	colShape->calculateLocalInertia(mass, localInertia);
 
-	startTransform.setOrigin(btVector3(0.0f, 50.0f, 0.0f));
+	startTransform.setOrigin(btVector3(x, y, z));
 
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
@@ -59,7 +59,7 @@ void Cube::Initialise()
 
 void Cube::Update(double dTime)
 {
-	body->applyTorque(btVector3(5.0f, 20.0f, 0.0f));
+	//body->applyTorque(btVector3(5.0f, 20.0f, 0.0f));
 	//body->applyCentralForce(btVector3(20.0f, 0.0f, 0.0f));
 
 	btTransform trans;
@@ -81,6 +81,20 @@ void Cube::Update(double dTime)
 	deltaTime = (float)dTime;
 	model->Update(deltaTime);
 	stencil->Update(deltaTime);
+
+	if (isHeld)
+	{
+		glm::vec3 pos = camera->GetCamPos();
+
+		btTransform newTrans = body->getWorldTransform();
+		newTrans.getOrigin() = (btVector3(pos.x, pos.y - 5.0f, pos.z - 40.0f));
+		body->setWorldTransform(newTrans);
+	}
+	if (inputManager->GetMouseState(MOUSE_LEFT) != KEY_DOWN)
+	{
+		isHeld = false;
+	}
+
 }
 
 void Cube::Draw()
@@ -107,4 +121,10 @@ void Cube::Draw()
 	//Disable writing to stencil mask
 	glStencilMask(0x00);
 	glDisable(GL_STENCIL_TEST);
+}
+
+void Cube::MousePressing()
+{
+	//Pick up cube and place in front of camera
+	isHeld = true;
 }

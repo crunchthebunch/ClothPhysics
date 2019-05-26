@@ -169,13 +169,13 @@ void Terrain::Draw()
 
 void Terrain::InitPhysics()
 {
-	btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(50.), btScalar(50.), btScalar(50.)));
+	btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(500.), btScalar(50.), btScalar(500.)));
 
 	physics->GetCollisionShapes()->push_back(groundShape);
 
 	btTransform groundTransform;
 	groundTransform.setIdentity();
-	groundTransform.setOrigin(btVector3(0.0f, -50.0f, 0.0f));
+	groundTransform.setOrigin(btVector3(0.0f, -48.0f, 0.0f));
 
 	btScalar mass(0.0f);
 

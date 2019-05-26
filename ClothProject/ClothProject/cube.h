@@ -14,6 +14,8 @@ public:
 	virtual void Update(double dTime);
 	virtual void Draw();
 
+	virtual void MousePressing();
+
 private:
 	PhysicsManager* physics;
 	btCollisionShape* colShape;
@@ -22,4 +24,6 @@ private:
 	Model* model;
 	Model* stencil;
 	Terrain* terrain;
+
+	bool isHeld;
 };

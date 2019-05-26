@@ -1,5 +1,8 @@
 #pragma once
 #include "btBulletDynamicsCommon.h"
+#include "BulletSoftBody\btSoftRigidDynamicsWorld.h"
+#include "BulletSoftBody/btSoftBodyHelpers.h"
+#include "BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h"
 
 class PhysicsManager
 {
@@ -11,13 +14,15 @@ public:
 	void Update(double _dTime);
 
 	btAlignedObjectArray<btCollisionShape*>* GetCollisionShapes();
-	btDynamicsWorld* GetWorld();
+	btSoftRigidDynamicsWorld* GetWorld();
+	btSoftBodyWorldInfo GetSoftInfo() const;
 
 private:
 	btDefaultCollisionConfiguration * collisionConfig;
 	btCollisionDispatcher* collisionDispatcher;
 	btBroadphaseInterface* broadphaseInterface;
 	btSequentialImpulseConstraintSolver* solver;
-	btDynamicsWorld* world;
+	btSoftRigidDynamicsWorld* world;
 	btAlignedObjectArray<btCollisionShape*> collisionShapes;
+	btSoftBodyWorldInfo softInfo;
 };

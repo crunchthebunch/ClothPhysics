@@ -140,6 +140,11 @@ public:
 		return meshes;
 	}
 
+	glm::mat4 GetMVP() const
+	{
+		return mvp;
+	}
+
 private:
 	/*  Model Data  */
 	glm::mat4 modelMatrix;

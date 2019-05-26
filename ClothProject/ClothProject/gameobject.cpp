@@ -266,6 +266,14 @@ int GameObject::GetScreenY() const
 	return screenY;
 }
 
+void GameObject::MouseHover()
+{
+}
+
+void GameObject::MousePressing()
+{
+}
+
 //------------------ Steering Behaviours -----------------------
 
 glm::vec2 GameObject::Seek(float _tX, float _tY, float _maxSpeed, float _turnSpeed, bool _arrival, bool _flee)
