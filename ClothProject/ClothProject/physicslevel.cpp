@@ -134,7 +134,7 @@ void PhysicsLevel::Initialise(Game * _myGame, ShaderLoader * _shaderloader, Asse
 
 	//Init Cloth
 	Cloth* cloth = new Cloth(this, physicsManager);
-	cloth->SetY(50.0f);
+	cloth->SetY(60.0f);
 	cloth->SetX(1.0f);
 	cloth->Initialise();
 	vecObjects.push_back(cloth);
@@ -201,35 +201,6 @@ void PhysicsLevel::Update()
 		{
 			wToggle = true;
 			wToggleDelay = 0.0f;
-		}
-	}
-
-	static bool fToggle = true;
-	static float fToggleDelay = 0.0f;
-
-	//Toggle Post-FX
-	if ((inputManager->GetKeyState('f') == KEY_DOWN || inputManager->GetKeyState('F') == KEY_DOWN) && fToggle == true)
-	{
-		if (isPostFX == false)
-		{
-			//screenQuad->SetFXMode(1);
-			//isPostFX = true;
-		}
-		else
-		{
-			//screenQuad->SetFXMode(0);
-			//isPostFX = false;
-		}
-		fToggle = false;
-	}
-
-	if (fToggle == false)
-	{
-		fToggleDelay += 1.0f * (float)clock->GetDeltaTick();
-		if (fToggleDelay >= 0.2f)
-		{
-			fToggle = true;
-			fToggleDelay = 0.0f;
 		}
 	}
 
@@ -333,7 +304,7 @@ void PhysicsLevel::MousePicking()
 			{
 				text->SetText("PICK UP");
 
-				if (inputManager->GetMouseState(MOUSE_LEFT) == KEY_DOWN)
+				if (inputManager->GetMouseState(MOUSE_LEFT) != KEY_DOWN)
 				{
 					obj->MousePressing();
 				}

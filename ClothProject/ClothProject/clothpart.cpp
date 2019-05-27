@@ -18,6 +18,7 @@ ClothPart::ClothPart(Level * _level, PhysicsManager * _physicsManager)
 	zRot = 0.0f;
 	rotationAngle = 0.0f;
 	isDebugDraw = true;
+	isStatic = false;
 }
 
 ClothPart::~ClothPart()
@@ -37,10 +38,15 @@ void ClothPart::Initialise()
 	btTransform startTransform;
 	startTransform.setIdentity();
 
-	btScalar mass(0.1f);
+	btScalar mass(0.0f);
 
-	btVector3 localInertia;
-	colShape->calculateLocalInertia(mass, localInertia);
+	btVector3 localInertia(0, 0, 0);
+
+	if (!isStatic)
+	{
+		mass = 0.1f;
+		colShape->calculateLocalInertia(mass, localInertia);
+	}
 
 	startTransform.setOrigin(btVector3(x, y, z));
 
@@ -81,6 +87,11 @@ void ClothPart::Draw()
 	{
 		sphere->Draw();
 	}
+}
+
+void ClothPart::SetIsStatic(bool _static)
+{
+	isStatic = _static;
 }
 
 btRigidBody * ClothPart::GetBody()

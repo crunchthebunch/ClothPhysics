@@ -37,18 +37,23 @@ void Cloth::Initialise()
 			part = new ClothPart(level, physics);
 			part->SetX((cellSpacing*j) - halfW);
 			part->SetY((cellSpacing*i) + halfH);
+			if (i == numRows - 1)
+			{
+				part->SetIsStatic(true);
+			}
+
 			part->Initialise();
 			vecParts.push_back(part);
 		}
 	}
 
-	//Constraining
+	//Constraining Horizontal Springs
 	ClothPart *partA, *partB;
 	partA = FindPart(0, 0);
 
 	for (int yy = 0; yy < numRows; yy++)
 	{
-		for (int xx = 1; xx < numCols; xx++)
+		for (int xx = 0; xx < numCols; xx++)
 		{
 			partB = FindPart(xx,yy);
 
@@ -57,7 +62,7 @@ void Cloth::Initialise()
 				CreateSpring(partA->GetBody(), partB->GetBody());
 			}
 
-			if (xx == numCols)
+			if (xx == numCols - 1)
 			{
 				partA = nullptr;
 			}
@@ -67,32 +72,32 @@ void Cloth::Initialise()
 			}
 		}
 	}
+	
+	//Constraining Vertical Springs
+	ClothPart *partC, *partD;
+	partC = FindPart(0, 0);
 
-	////Constraining
-	//ClothPart *partC, *partD;
-	//partC = FindPart(0, 0);
+	for (int yy = 0; yy < numRows; yy++)
+	{
+		for (int xx = 0; xx < numCols; xx++)
+		{
+			partD = FindPart(yy, xx);
 
-	//for (int xx = 0; xx < numCols; xx++)
-	//{
-	//	for (int yy = 0; yy < numRows; yy++)
-	//	{
-	//		partD = FindPart(xx, yy);
+			if ((partC != nullptr && partD != nullptr) && (partC != partD))
+			{
+				CreateSpring(partC->GetBody(), partD->GetBody());
+			}
 
-	//		if ((partC != nullptr && partD != nullptr) && (partC != partD))
-	//		{
-	//			CreateSpring(partC->GetBody(), partD->GetBody());
-	//		}
-
-	//		if (xx == numCols)
-	//		{
-	//			partC = nullptr;
-	//		}
-	//		else
-	//		{
-	//			partC = partD;
-	//		}
-	//	}
-	//}
+			if (xx == numCols - 1)
+			{
+				partC = nullptr;
+			}
+			else
+			{
+				partC = partD;
+			}
+		}
+	}
 }
 
 void Cloth::Update(double dTime)
@@ -121,33 +126,34 @@ void Cloth::Draw()
 
 void Cloth::CreateSpring(btRigidBody * bodyA, btRigidBody * bodyB)
 {
+	float halfCell = cellSpacing * 0.5f;
 	//Spring constraint
 	btGeneric6DofSpringConstraint *spring = new btGeneric6DofSpringConstraint(
 		*bodyA, *bodyB,
-		btTransform(btQuaternion::getIdentity(), { 4.0f, 4.0f, 4.0f }),
-		btTransform(btQuaternion::getIdentity(), { 0.0f,  0.0f, 0.0f }),
+		btTransform(btQuaternion::getIdentity(), { halfCell, halfCell, halfCell }),
+		btTransform(btQuaternion::getIdentity(), { halfCell, halfCell, halfCell }),
 		true
 	);
 
-	spring->setLinearLowerLimit(btVector3(1.0f, 1.0f, 1.0f));
-	spring->setLinearUpperLimit(btVector3(4.0f, 4.0f, 4.0f));
-	//spring->setAngularLowerLimit(btVector3(-15.0f, -15.0f, -15.0f));
-	//spring->setAngularUpperLimit(btVector3(15.0f, 15.0f, 15.0f));
+	spring->setLinearLowerLimit(btVector3(-cellSpacing, -cellSpacing, -cellSpacing));
+	spring->setLinearUpperLimit(btVector3(cellSpacing, cellSpacing, cellSpacing));
+	spring->setAngularLowerLimit(btVector3(-0.5f, -0.5f, -0.5f));
+	spring->setAngularUpperLimit(btVector3(0.5f, 0.5f, 0.5f));
 
 	//Enable X
 	spring->enableSpring(0, true);
 	spring->setStiffness(0, 5.0f);
-	spring->setDamping(0, 0.5f);
+	spring->setDamping(0, 0.0f);
 
 	//Enable Y
 	spring->enableSpring(1, true);
 	spring->setStiffness(1, 5.0f);
-	spring->setDamping(1, 0.5f);
+	spring->setDamping(1, 0.0f);
 
 	//Enable Z
 	spring->enableSpring(2, true);
 	spring->setStiffness(2, 5.0f);
-	spring->setDamping(2, 0.5f);
+	spring->setDamping(2, 0.0f);
 
 	////Enable X
 	//spring->enableSpring(3, true);

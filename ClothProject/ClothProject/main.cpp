@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
 	glutInitWindowPosition(20, 20);
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	glutCreateWindow("Terrain Project - Zheng Yu Bu");
+	glutCreateWindow("Cloth Physics - John & Varun");
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f); //clear
 
 	//Init DPI Aware

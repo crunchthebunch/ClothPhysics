@@ -25,7 +25,7 @@ private:
 	PhysicsManager * physics;
 	Level* level;
 	std::vector<ClothPart*> vecParts;
-	std::vector<btGeneric6DofSpringConstraint*> vecSprings;
+	std::vector<btGeneric6DofConstraint*> vecSprings;
 
 	float width;
 	float height;
