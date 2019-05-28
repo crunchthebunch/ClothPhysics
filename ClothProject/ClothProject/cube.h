@@ -22,7 +22,6 @@ private:
 	btRigidBody* body;
 	Level* level;
 	Model* model;
-	Model* stencil;
 	Terrain* terrain;
 
 	bool isHeld;

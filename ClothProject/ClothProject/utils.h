@@ -66,6 +66,17 @@ public:
 		return ((radians * 180) / MATH_PI);
 	}
 
+	//Returns if the number is an even number or not
+	template <typename T>
+	static bool IsEven(const T& num)
+	{
+		if (num % 2 == 0)
+		{
+			return true;
+		}
+		return false;
+	}
+
 	//Gets the mean average of a set of numbers
 	template <typename T>
 	static T MeanAverage(std::initializer_list<T> list)

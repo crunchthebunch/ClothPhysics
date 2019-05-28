@@ -12,6 +12,7 @@ PhysicsLevel::PhysicsLevel()
 	isInit = false;
 	isWireframe = false;
 	isPostFX = false;
+	physicsManager = new PhysicsManager();
 }
 
 PhysicsLevel::~PhysicsLevel()
@@ -49,7 +50,6 @@ void PhysicsLevel::Initialise(Game * _myGame, ShaderLoader * _shaderloader, Asse
 	inputManager = _inputManager;
 
 	//Init Physics Manager
-	physicsManager = new PhysicsManager();
 	physicsManager->Initialise();
 
 	//VBO
@@ -128,14 +128,15 @@ void PhysicsLevel::Initialise(Game * _myGame, ShaderLoader * _shaderloader, Asse
 	//Init Cube
 	cube = new Cube(this, physicsManager, terrain);
 	cube->SetY(20.0f);
+	cube->SetZ(10.0f);
 	cube->Initialise();
 	vecObjects.push_back(cube);
 	vecPickable.push_back(cube);
 
 	//Init Cloth
 	Cloth* cloth = new Cloth(this, physicsManager);
-	cloth->SetY(60.0f);
-	cloth->SetX(1.0f);
+	cloth->SetVecPickable(&vecPickable);
+	cloth->SetY(50.0f);
 	cloth->Initialise();
 	vecObjects.push_back(cloth);
 
@@ -177,32 +178,32 @@ void PhysicsLevel::Update()
 	//Update Mouse Picker
 	MousePicking();
 
-	static bool wToggle = true;
-	static float wToggleDelay = 0.0f;
+	//static bool wToggle = true;
+	//static float wToggleDelay = 0.0f;
 
-	//Toggle WireFrame
-	if ((inputManager->GetKeyState('t') == KEY_DOWN || inputManager->GetKeyState('T') == KEY_DOWN) && wToggle == true)
-	{
-		if (isWireframe == false)
-		{
-			isWireframe = true;
-		}
-		else
-		{
-			isWireframe = false;
-		}
-		wToggle = false;
-	}
+	////Toggle WireFrame
+	//if ((inputManager->GetKeyState('t') == KEY_DOWN || inputManager->GetKeyState('T') == KEY_DOWN) && wToggle == true)
+	//{
+	//	if (isWireframe == false)
+	//	{
+	//		isWireframe = true;
+	//	}
+	//	else
+	//	{
+	//		isWireframe = false;
+	//	}
+	//	wToggle = false;
+	//}
 
-	if (wToggle == false)
-	{
-		wToggleDelay += 1.0f * (float)clock->GetDeltaTick();
-		if (wToggleDelay >= 0.2f)
-		{
-			wToggle = true;
-			wToggleDelay = 0.0f;
-		}
-	}
+	//if (wToggle == false)
+	//{
+	//	wToggleDelay += 1.0f * (float)clock->GetDeltaTick();
+	//	if (wToggleDelay >= 0.2f)
+	//	{
+	//		wToggle = true;
+	//		wToggleDelay = 0.0f;
+	//	}
+	//}
 
 	glutPostRedisplay();
 }
@@ -302,11 +303,13 @@ void PhysicsLevel::MousePicking()
 
 			if (mousePicker->GetPickedObject() == obj)
 			{
-				text->SetText("PICK UP");
-
 				if (inputManager->GetMouseState(MOUSE_LEFT) == KEY_DOWN)
 				{
 					obj->MousePressing();
+				}
+				else
+				{
+					text->SetText("PICK UP");
 				}
 			}
 		}

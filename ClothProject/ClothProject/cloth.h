@@ -17,8 +17,11 @@ public:
 	virtual void Update(double dTime);
 	virtual void Draw();
 
+	void SetVecPickable(std::vector<GameObject*>* _vecPickable);
+
 private:
 	void CreateSpring(btRigidBody* bodyA, btRigidBody* bodyB);
+	void ConstrainParts();
 	ClothPart* FindPart(int _x, int _y);
 
 private:
@@ -26,6 +29,7 @@ private:
 	Level* level;
 	std::vector<ClothPart*> vecParts;
 	std::vector<btGeneric6DofConstraint*> vecSprings;
+	std::vector<GameObject*>* vecPickable;
 
 	float width;
 	float height;

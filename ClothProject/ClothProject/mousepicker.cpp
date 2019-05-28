@@ -7,7 +7,7 @@ MousePicker::MousePicker(Level * _level, std::vector<GameObject*>* _vecPickable)
 	vecPickable = _vecPickable;
 	camera = level->GetCamera();
 	inputManager = level->GetInputManager();
-	radius = 2.0f;
+	radius = 1.5f;
 }
 
 MousePicker::~MousePicker()

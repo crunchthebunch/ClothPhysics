@@ -2,6 +2,7 @@
 
 PhysicsManager::PhysicsManager()
 {
+	gravity = -10.0f;
 }
 
 PhysicsManager::~PhysicsManager()
@@ -39,7 +40,7 @@ void PhysicsManager::Initialise()
 	broadphaseInterface = new btDbvtBroadphase();
 	solver = new btSequentialImpulseConstraintSolver;
 	world = new btSoftRigidDynamicsWorld(collisionDispatcher, broadphaseInterface, solver, collisionConfig);
-	world->setGravity(btVector3(0.0f, -10.0f, 0.0f));
+	world->setGravity(btVector3(0.0f, gravity, 0.0f));
 
 	softInfo.m_broadphase = broadphaseInterface;
 	softInfo.m_dispatcher = collisionDispatcher;

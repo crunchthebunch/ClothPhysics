@@ -1,8 +1,7 @@
-﻿  physicslevel.cpp
-l:\cloth\clothphysics\clothproject\clothproject\physicslevel.cpp(52): warning C4316: 'PhysicsManager': object allocated on the heap may not be aligned 16
+﻿  clothpart.cpp
   Generating code
-  1 of 7254 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 7265 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    23 functions had inline decision re-evaluated but remain unchanged
+    22 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   ClothProject.vcxproj -> L:\Cloth\ClothPhysics\ClothProject\Release\ClothProject.exe
