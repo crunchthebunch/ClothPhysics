@@ -32,5 +32,7 @@ private:
 	int numRows;
 	int numCols;
 
+	Mesh* clothMesh;
+
 	float cellSpacing;
 };

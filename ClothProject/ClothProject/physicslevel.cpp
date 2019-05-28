@@ -132,6 +132,20 @@ void PhysicsLevel::Initialise(Game * _myGame, ShaderLoader * _shaderloader, Asse
 	vecObjects.push_back(cube);
 	vecPickable.push_back(cube);
 
+	//Init Sphere
+	sphere = new Sphere(this, physicsManager, terrain);
+	sphere->SetY(20.0f);
+	sphere->Initialise();
+	vecObjects.push_back(sphere);
+	vecPickable.push_back(sphere);
+
+	//Init Pyramid
+	pyramid = new Pyramid(this, physicsManager, terrain);
+	pyramid->SetY(20.0f);
+	pyramid->Initialise();
+	vecObjects.push_back(pyramid);
+	vecPickable.push_back(pyramid);
+
 	//Init Cloth
 	Cloth* cloth = new Cloth(this, physicsManager);
 	cloth->SetY(60.0f);

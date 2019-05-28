@@ -579,6 +579,12 @@
     <ClCompile Include="clothpart.cpp">
       <Filter>Source Files\ClothProject</Filter>
     </ClCompile>
+    <ClCompile Include="sphere.cpp">
+      <Filter>Source Files\ClothProject</Filter>
+    </ClCompile>
+    <ClCompile Include="pyramid.cpp">
+      <Filter>Source Files\ClothProject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assetloader.h">
@@ -1383,6 +1389,12 @@
       <Filter>Bullet</Filter>
     </ClInclude>
     <ClInclude Include="clothpart.h">
+      <Filter>Header Files\ClothProject</Filter>
+    </ClInclude>
+    <ClInclude Include="sphere.h">
+      <Filter>Header Files\ClothProject</Filter>
+    </ClInclude>
+    <ClInclude Include="pyramid.h">
       <Filter>Header Files\ClothProject</Filter>
     </ClInclude>
   </ItemGroup>

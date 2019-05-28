@@ -1,6 +1,8 @@
 #pragma once
 #include "mousepicker.h"
 #include "cube.h"
+#include "sphere.h"
+#include "pyramid.h"
 #include "screenquad.h"
 
 class PhysicsManager;
@@ -28,6 +30,8 @@ private:
 	Texter* text;
 
 	Cube* cube;
+	Sphere* sphere;
+	Pyramid* pyramid;
 
 	GLuint FBO;
 	GLuint RBO;

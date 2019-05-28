@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{EAC93906-4637-43A5-A8A9-A3EF2922EF31}</ProjectGuid>
     <RootNamespace>DragonDrop</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -337,8 +337,10 @@
     <ClCompile Include="mesh.cpp" />
     <ClCompile Include="mousepicker.cpp" />
     <ClCompile Include="physicsmanager.cpp" />
+    <ClCompile Include="pyramid.cpp" />
     <ClCompile Include="screenquad.cpp" />
     <ClCompile Include="shaderloader.cpp" />
+    <ClCompile Include="sphere.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="terrain.cpp" />
     <ClCompile Include="texter.cpp" />
@@ -605,9 +607,11 @@
     <ClInclude Include="modelmesh.h" />
     <ClInclude Include="mousepicker.h" />
     <ClInclude Include="physicsmanager.h" />
+    <ClInclude Include="pyramid.h" />
     <ClInclude Include="screenquad.h" />
     <ClInclude Include="shaderloader.h" />
     <ClInclude Include="meshsphere.h" />
+    <ClInclude Include="sphere.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="terrain.h" />
     <ClInclude Include="texter.h" />

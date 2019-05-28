@@ -24,6 +24,9 @@ Cloth::~Cloth()
 
 void Cloth::Initialise()
 {
+	clothMesh = new Mesh(this);
+	//clothMesh->InitMesh("Assets/cube.png", "cube", 0.0f, 1, numCols, numRows, 0, 1024, 1024);
+
 	//Create grid of cloth parts constrained by spring constraints
 	float halfW = width * 0.5f;
 	float halfH = height * 0.5f;
@@ -110,6 +113,9 @@ void Cloth::Update(double dTime)
 			vecParts[i]->Update(deltaTime);
 		}
 	}
+
+	clothMesh->Update(dTime);
+	
 }
 
 void Cloth::Draw()
@@ -122,6 +128,9 @@ void Cloth::Draw()
 			vecParts[i]->Draw();
 		}
 	}
+
+	clothMesh->Draw();
+
 }
 
 void Cloth::CreateSpring(btRigidBody * bodyA, btRigidBody * bodyB)
