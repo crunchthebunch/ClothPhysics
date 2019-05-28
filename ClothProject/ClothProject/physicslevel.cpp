@@ -304,7 +304,7 @@ void PhysicsLevel::MousePicking()
 			{
 				text->SetText("PICK UP");
 
-				if (inputManager->GetMouseState(MOUSE_LEFT) != KEY_DOWN)
+				if (inputManager->GetMouseState(MOUSE_LEFT) == KEY_DOWN)
 				{
 					obj->MousePressing();
 				}
