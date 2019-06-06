@@ -2,6 +2,7 @@
 #include "mousepicker.h"
 #include "cube.h"
 #include "sphere.h"
+#include "capsule.h"
 #include "pyramid.h"
 #include "screenquad.h"
 
@@ -32,6 +33,7 @@ private:
 	Cube* cube;
 	Sphere* sphere;
 	Pyramid* pyramid;
+	//Capsule* capsule;
 
 	GLuint FBO;
 	GLuint RBO;

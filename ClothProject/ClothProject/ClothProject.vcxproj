@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{EAC93906-4637-43A5-A8A9-A3EF2922EF31}</ProjectGuid>
     <RootNamespace>DragonDrop</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -161,6 +161,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="capsule.cpp" />
     <ClCompile Include="clock.cpp" />
     <ClCompile Include="cloth.cpp" />
     <ClCompile Include="clothpart.cpp" />
@@ -348,6 +349,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
+    <ClInclude Include="capsule.h" />
     <ClInclude Include="clock.h" />
     <ClInclude Include="cloth.h" />
     <ClInclude Include="clothpart.h" />

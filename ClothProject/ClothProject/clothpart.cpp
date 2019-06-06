@@ -87,6 +87,16 @@ void ClothPart::Draw()
 	{
 		sphere->Draw();
 	}
+
+	//glFrontFace(GL_CW);
+
+	//glBegin(GL_TRIANGLE_STRIP);
+	//glVertex3f(0.0f, 1.0f, 0.0f); //vertex 1
+	//glVertex3f(0.0f, 0.0f, 0.0f); //vertex 2
+	//glVertex3f(1.0f, 1.0f, 0.0f); //vertex 3
+	//glVertex3f(1.5f, 0.0f, 0.0f); //vertex 4
+	//glEnd();
+
 }
 
 void ClothPart::SetIsStatic(bool _static)

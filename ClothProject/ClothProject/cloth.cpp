@@ -1,14 +1,23 @@
 #include "cloth.h"
+#include "cubemap.h"
 
 Cloth::Cloth(Level * _level, PhysicsManager * _physicsManager)
 {
 	level = _level;
 	physics = _physicsManager;
+	camera = level->GetCamera();
+	shaderLoader = level->GetShaderLoader();
+	assetLoader = level->GetAssetLoader();
+	skyBoxTexture = level->GetSkyBox()->GetTexture();
 	width = 32.0f;
 	height = 32.0f;
 	numRows = 8;
 	numCols = 8;
 	cellSpacing = width/numCols;
+	xRot = 0.0f;
+	yRot = 1.0f;
+	zRot = 0.0f;
+	rotationAngle = 0.0f;
 }
 
 Cloth::~Cloth()
@@ -24,8 +33,10 @@ Cloth::~Cloth()
 
 void Cloth::Initialise()
 {
-	clothMesh = new Mesh(this);
+	//clothMesh = new ClothMesh(this, level->GetSkyBox());
+	//clothMesh->Initialise();
 	//clothMesh->InitMesh("Assets/cube.png", "cube", 0.0f, 1, numCols, numRows, 0, 1024, 1024);
+	//clothMesh = new Mesh();
 
 	//Create grid of cloth parts constrained by spring constraints
 	float halfW = width * 0.5f;
@@ -114,7 +125,7 @@ void Cloth::Update(double dTime)
 		}
 	}
 
-	clothMesh->Update(dTime);
+	//clothMesh->Update(dTime);
 	
 }
 
@@ -129,7 +140,7 @@ void Cloth::Draw()
 		}
 	}
 
-	clothMesh->Draw();
+	//clothMesh->Draw();
 
 }
 
