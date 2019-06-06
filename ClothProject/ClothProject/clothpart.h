@@ -15,6 +15,8 @@ public:
 	virtual void Update(double dTime);
 	virtual void Draw();
 
+	virtual void MousePressing();
+
 	void SetIsStatic(bool _static);
 	btRigidBody* GetBody();
 
@@ -25,4 +27,5 @@ private:
 	MeshSphere* sphere;
 	bool isDebugDraw;
 	bool isStatic;
+	bool isHeld;
 };

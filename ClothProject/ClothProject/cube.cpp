@@ -25,7 +25,6 @@ Cube::Cube(Level * _level, PhysicsManager* _physicsManager, Terrain * _terrain)
 Cube::~Cube()
 {
 	delete model;
-	delete stencil;
 }
 
 void Cube::Initialise()
@@ -33,7 +32,6 @@ void Cube::Initialise()
 	SetUniformScale(0.05f);
 
 	model = new Model("Assets/CubeModel.obj", this);
-	stencil = new  Model("Assets/StencilModel.obj", this);
 	
 	//Physics
 	colShape = new btBoxShape(btVector3(3.0f, 3.0f, 3.0f));
@@ -60,10 +58,10 @@ void Cube::Initialise()
 void Cube::Update(double dTime)
 {
 	//body->applyTorque(btVector3(5.0f, 20.0f, 0.0f));
-	//body->applyCentralForce(btVector3(20.0f, 0.0f, 0.0f));
 
 	btTransform trans;
-	body->getMotionState()->getWorldTransform(trans);
+	//body->getMotionState()->getWorldTransform(trans);
+	trans = body->getInterpolationWorldTransform();
 
 	btVector3 pos = trans.getOrigin();
 	btQuaternion rotation = trans.getRotation();
@@ -80,47 +78,43 @@ void Cube::Update(double dTime)
 
 	deltaTime = (float)dTime;
 	model->Update(deltaTime);
-	stencil->Update(deltaTime);
 
 	if (isHeld)
 	{
 		glm::vec3 pos = camera->GetCamPos();
+		glm::vec3 moveTo = pos - GetPosition();
+		moveTo.y -= 5.0f;
+		moveTo.z -= 20.0f;
+		moveTo *= 5.0f;
 
-		btTransform newTrans = body->getWorldTransform();
-		newTrans.getOrigin() = (btVector3(pos.x, pos.y - 5.0f, pos.z - 40.0f));
-		body->setWorldTransform(newTrans);
+		body->activate(true);
+		body->setLinearVelocity(btVector3(moveTo.x, moveTo.y, moveTo.z));
 	}
-	if (inputManager->GetMouseState(MOUSE_LEFT) != KEY_DOWN)
+
+	//Dropping the object
+	if (inputManager->GetMouseState(MOUSE_LEFT) == KEY_UP && isHeld == true)
 	{
 		isHeld = false;
+		body->activate(true);
+		body->applyCentralImpulse(btVector3(0.0f, 10.0f, -100.0f));
+	}
+	
+	//Constraining object to level bounds
+	if (x > 120.0f || x < -120.0f || z > 120.0f || z < -120.0f)
+	{
+		glm::vec3 moveTo = -GetPosition();
+		glm::normalize(moveTo);
+		moveTo *= 0.1f;
+
+		body->setLinearVelocity(btVector3(moveTo.x, moveTo.y, moveTo.z));
 	}
 
 }
 
 void Cube::Draw()
 {
-	//Enable the stencil test
-	glEnable(GL_STENCIL_TEST);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-
-	//1st pass
-	glStencilFunc(GL_ALWAYS, 1, 0xFF);
-	glStencilMask(0xFF);
-	glClear(GL_STENCIL_BUFFER_BIT);
-
 	//Render regular cube
 	model->Draw();
-
-	//2nd pass
-	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-	glStencilMask(0x00);
-
-	//Render scaled up cube
-	stencil->Draw();
-
-	//Disable writing to stencil mask
-	glStencilMask(0x00);
-	glDisable(GL_STENCIL_TEST);
 }
 
 void Cube::MousePressing()

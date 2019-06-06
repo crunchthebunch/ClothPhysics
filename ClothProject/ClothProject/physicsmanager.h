@@ -18,6 +18,7 @@ public:
 	btSoftBodyWorldInfo GetSoftInfo() const;
 
 private:
+	float gravity;
 	btDefaultCollisionConfiguration * collisionConfig;
 	btCollisionDispatcher* collisionDispatcher;
 	btBroadphaseInterface* broadphaseInterface;

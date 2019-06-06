@@ -11,8 +11,8 @@ Cloth::Cloth(Level * _level, PhysicsManager * _physicsManager)
 	skyBoxTexture = level->GetSkyBox()->GetTexture();
 	width = 32.0f;
 	height = 32.0f;
-	numRows = 8;
-	numCols = 8;
+	numRows = 15;
+	numCols = 15;
 	cellSpacing = width/numCols;
 	xRot = 0.0f;
 	yRot = 1.0f;
@@ -22,6 +22,14 @@ Cloth::Cloth(Level * _level, PhysicsManager * _physicsManager)
 
 Cloth::~Cloth()
 {
+	//Delete springs
+	while (vecSprings.size() > 0)
+	{
+		btGeneric6DofConstraint* temp = vecSprings[vecSprings.size() - 1];
+		vecSprings.pop_back();
+		delete temp;
+	}
+
 	//Delete cloth parts
 	while (vecParts.size() > 0)
 	{
@@ -51,67 +59,19 @@ void Cloth::Initialise()
 			part = new ClothPart(level, physics);
 			part->SetX((cellSpacing*j) - halfW);
 			part->SetY((cellSpacing*i) + halfH);
-			if (i == numRows - 1)
+
+			if (i == numRows - 1 && Utils::IsEven(j) == true)
 			{
 				part->SetIsStatic(true);
 			}
 
 			part->Initialise();
 			vecParts.push_back(part);
+			vecPickable->push_back(part);
 		}
 	}
 
-	//Constraining Horizontal Springs
-	ClothPart *partA, *partB;
-	partA = FindPart(0, 0);
-
-	for (int yy = 0; yy < numRows; yy++)
-	{
-		for (int xx = 0; xx < numCols; xx++)
-		{
-			partB = FindPart(xx,yy);
-
-			if ((partA != nullptr && partB != nullptr) && (partA != partB))
-			{
-				CreateSpring(partA->GetBody(), partB->GetBody());
-			}
-
-			if (xx == numCols - 1)
-			{
-				partA = nullptr;
-			}
-			else
-			{
-				partA = partB;
-			}
-		}
-	}
-	
-	//Constraining Vertical Springs
-	ClothPart *partC, *partD;
-	partC = FindPart(0, 0);
-
-	for (int yy = 0; yy < numRows; yy++)
-	{
-		for (int xx = 0; xx < numCols; xx++)
-		{
-			partD = FindPart(yy, xx);
-
-			if ((partC != nullptr && partD != nullptr) && (partC != partD))
-			{
-				CreateSpring(partC->GetBody(), partD->GetBody());
-			}
-
-			if (xx == numCols - 1)
-			{
-				partC = nullptr;
-			}
-			else
-			{
-				partC = partD;
-			}
-		}
-	}
+	ConstrainParts();
 }
 
 void Cloth::Update(double dTime)
@@ -125,8 +85,14 @@ void Cloth::Update(double dTime)
 		}
 	}
 
-	//clothMesh->Update(dTime);
-	
+	//Disable torn parts
+	for (unsigned int i = 0; i < vecSprings.size(); i++)
+	{
+		if (vecSprings[i]->getAppliedImpulse() >= 2.5f)
+		{
+			vecSprings[i]->setEnabled(false);
+		}
+	}
 }
 
 void Cloth::Draw()
@@ -155,40 +121,40 @@ void Cloth::CreateSpring(btRigidBody * bodyA, btRigidBody * bodyB)
 		true
 	);
 
-	spring->setLinearLowerLimit(btVector3(-cellSpacing, -cellSpacing, -cellSpacing));
-	spring->setLinearUpperLimit(btVector3(cellSpacing, cellSpacing, cellSpacing));
-	spring->setAngularLowerLimit(btVector3(-0.5f, -0.5f, -0.5f));
-	spring->setAngularUpperLimit(btVector3(0.5f, 0.5f, 0.5f));
+	spring->setLinearLowerLimit(btVector3(2.0f*-cellSpacing, 2.0f*-cellSpacing, 2.0f*-cellSpacing));
+	spring->setLinearUpperLimit(btVector3(1.0f*cellSpacing, 1.0f*cellSpacing, 1.0f*cellSpacing));
+	spring->setAngularLowerLimit(btVector3(-0.0f, -0.0f, -0.0f));
+	spring->setAngularUpperLimit(btVector3(0.0f, 0.0f, 0.0f));
 
 	//Enable X
 	spring->enableSpring(0, true);
-	spring->setStiffness(0, 5.0f);
-	spring->setDamping(0, 0.0f);
+	spring->setStiffness(0, 1.0f);
+	spring->setDamping(0, 5.0f);
 
 	//Enable Y
 	spring->enableSpring(1, true);
-	spring->setStiffness(1, 5.0f);
-	spring->setDamping(1, 0.0f);
+	spring->setStiffness(1, 1.0f);
+	spring->setDamping(1, 5.0f);
 
 	//Enable Z
 	spring->enableSpring(2, true);
-	spring->setStiffness(2, 5.0f);
-	spring->setDamping(2, 0.0f);
+	spring->setStiffness(2, 1.0f);
+	spring->setDamping(2, 5.0f);
 
-	////Enable X
-	//spring->enableSpring(3, true);
-	//spring->setStiffness(3, 35.0f);
-	//spring->setDamping(3, 0.5f);
+	//Enable X
+	/*spring->enableSpring(3, true);
+	spring->setStiffness(3, 5.0f);
+	spring->setDamping(3, 1.0f);*/
 
-	////Enable Y
+	//Enable Y
 	//spring->enableSpring(4, true);
-	//spring->setStiffness(4, 35.0f);
-	//spring->setDamping(4, 0.5f);
+	//spring->setStiffness(4, 5.0f);
+	//spring->setDamping(4, 1.0f);
 
 	////Enable Z
 	//spring->enableSpring(5, true);
-	//spring->setStiffness(5, 35.0f);
-	//spring->setDamping(5, 0.5f);
+	//spring->setStiffness(5, 5.0f);
+	//spring->setDamping(5, 100.0f);
 	
 	spring->setEquilibriumPoint();
 
@@ -196,8 +162,104 @@ void Cloth::CreateSpring(btRigidBody * bodyA, btRigidBody * bodyB)
 	physics->GetWorld()->addConstraint(spring);
 }
 
+void Cloth::ConstrainParts()
+{
+	//Constraining Horizontal Springs
+	ClothPart *partA, *partB;
+	partA = FindPart(0, 0);
+
+	for (int yy = 0; yy < numRows; yy++)
+	{
+		for (int xx = 0; xx < numCols; xx++)
+		{
+			partB = FindPart(xx, yy);
+
+			if ((partA != nullptr && partB != nullptr) && (partA != partB))
+			{
+				CreateSpring(partA->GetBody(), partB->GetBody());
+			}
+
+			if (xx == numCols - 1)
+			{
+				partA = nullptr;
+			}
+			else
+			{
+				partA = partB;
+			}
+		}
+	}
+
+	//Constraining Vertical Springs
+	partA = FindPart(0, 0);
+
+	for (int yy = 0; yy < numRows; yy++)
+	{
+		for (int xx = 0; xx < numCols; xx++)
+		{
+			partB = FindPart(yy, xx);
+
+			if ((partA != nullptr && partB != nullptr) && (partA != partB))
+			{
+				CreateSpring(partA->GetBody(), partB->GetBody());
+			}
+
+			if (xx == numCols - 1)
+			{
+				partA = nullptr;
+			}
+			else
+			{
+				partA = partB;
+			}
+		}
+	}
+
+	//Constraining Diagonal "\" Springs
+	for (int yy = 0; yy < numRows; yy++)
+	{
+		for (int xx = 0; xx < numCols; xx++)
+		{
+			if (yy + 1 < numRows - 1 && xx + 1 < numCols - 1)
+			{
+				partA = FindPart(xx, yy);
+				partB = FindPart(xx + 1, yy + 1);
+				CreateSpring(partA->GetBody(), partB->GetBody());
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
+	//Constraining Diagonal "/" Springs
+	for (int yy = 0; yy < numRows; yy++)
+	{
+		for (int xx = 0; xx < numCols; xx++)
+		{
+			if (yy - 1 >= 0 && xx - 1 >= 0)
+			{
+				partA = FindPart(xx, yy);
+				partB = FindPart(xx - 1, yy - 1);
+				CreateSpring(partA->GetBody(), partB->GetBody());
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+}
+
 ClothPart * Cloth::FindPart(int _x, int _y)
 {
 	ClothPart* part = vecParts[_x + (_y * numCols)];
 	return part;
+}
+
+
+void Cloth::SetVecPickable(std::vector<GameObject*>* _vecPickable)
+{
+	vecPickable = _vecPickable;
 }

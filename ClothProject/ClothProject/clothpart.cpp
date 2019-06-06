@@ -79,6 +79,35 @@ void ClothPart::Update(double dTime)
 	{
 		sphere->Update(dTime);
 	}
+
+	if (isHeld)
+	{
+		glm::vec3 pos = camera->GetCamPos();
+		glm::vec3 moveTo = pos - GetPosition();
+		moveTo.y -= 0.0f;
+		moveTo.z -= 50.0f;
+		moveTo *= 1.0f;
+
+		body->activate(true);
+		body->setLinearVelocity(btVector3(moveTo.x, moveTo.y, moveTo.z));
+	}
+
+	//Dropping the object
+	if (inputManager->GetMouseState(MOUSE_LEFT) == KEY_UP && isHeld == true)
+	{
+		isHeld = false;
+		body->activate(true);
+	}
+
+	//Constraining object to level bounds
+	if (x > 120.0f || x < -120.0f || z > 120.0f || z < -120.0f)
+	{
+		glm::vec3 moveTo = -GetPosition();
+		glm::normalize(moveTo);
+		moveTo *= 0.1f;
+
+		body->setLinearVelocity(btVector3(moveTo.x, moveTo.y, moveTo.z));
+	}
 }
 
 void ClothPart::Draw()
@@ -97,6 +126,14 @@ void ClothPart::Draw()
 	//glVertex3f(1.5f, 0.0f, 0.0f); //vertex 4
 	//glEnd();
 
+}
+
+void ClothPart::MousePressing()
+{
+	if (!isStatic)
+	{
+		isHeld = true;
+	}
 }
 
 void ClothPart::SetIsStatic(bool _static)
