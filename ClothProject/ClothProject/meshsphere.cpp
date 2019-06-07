@@ -27,7 +27,7 @@ void MeshSphere::Initialise()
 {
 	float radius = 1.0f;
 
-	const int sections = 12;
+	const int sections = 18;
 	const int vertexAttrib = 8;
 	const int indexPerQuad = 6;
 
