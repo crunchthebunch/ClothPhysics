@@ -6,8 +6,8 @@ ClothPart::ClothPart(Level * _level, PhysicsManager * _physicsManager, Cloth* cl
 {
 	this->level = _level;
 	this->cloth = cloth;
-	this->row = row;
-	this->col = col;
+	this->row = col;
+	this->col = row;
 
 	VBO = level->GetVBO();
 	camera = level->GetCamera();
@@ -120,22 +120,30 @@ void ClothPart::Update(double dTime)
 
 void ClothPart::Draw()
 {
+	float offset = 1.0f;
+
 	if (isDebugDraw)
 	{
 		sphere->Draw();
+
+		//if (col < cloth->getNumCols() - 1 && row < cloth->getNumRows() - 1)
+		//{
+		//	glFrontFace(GL_CW);
+
+		//	//glBegin(GL_TRIANGLE_STRIP);
+		//	//glScalef(4.0f, 4.0f, 4.0f);
+		//	//glVertex3f(sphere->GetX(), sphere->GetY(), sphere->GetZ()); //vertex 2
+		//	//glVertex3f(part2->sphere->GetX() + offset, part2->sphere->GetY(), part2->sphere->GetZ()); //vertex 4
+		//	//glVertex3f(part1->sphere->GetX(), part1->sphere->GetY() + offset, part1->sphere->GetZ()); //vertex 1
+		//	//glVertex3f(part3->sphere->GetX() + offset, part3->sphere->GetY() + offset, part3->sphere->GetZ() ); //vertex 3
+	
+		//	//glVertex3f(this->GetX(), this->GetY(), this->GetZ()); //vertex 2ss
+		//	
+		//	//glEnd();
+		//}
 	}
 
-	if (col < cloth->getNumCols() - 1 && row < cloth->getNumRows() - 1)
-	{
-		glFrontFace(GL_CW);
-
-		glBegin(GL_TRIANGLE_STRIP);
-		glVertex3f(x, y, z); //vertex 1
-		glVertex3f(part2->GetPosition().x, part2->GetPosition().y, part2->GetPosition().z); //vertex 2
-		glVertex3f(part1->GetPosition().x, part1->GetPosition().y, part1->GetPosition().z); //vertex 3
-		glVertex3f(part3->GetPosition().x, part3->GetPosition().y, part3->GetPosition().z); //vertex 4
-		glEnd();
-	}
+	
 }
 
 void ClothPart::MousePressing()

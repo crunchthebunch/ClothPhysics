@@ -41,11 +41,6 @@ Cloth::~Cloth()
 
 void Cloth::Initialise()
 {
-	//clothMesh = new ClothMesh(this, level->GetSkyBox());
-	//clothMesh->Initialise();
-	//clothMesh->InitMesh("Assets/cube.png", "cube", 0.0f, 1, numCols, numRows, 0, 1024, 1024);
-	//clothMesh = new Mesh();
-
 	//Create grid of cloth parts constrained by spring constraints
 	float halfW = width * 0.5f;
 	float halfH = height * 0.5f;
@@ -65,11 +60,11 @@ void Cloth::Initialise()
 				part->SetIsStatic(true);
 			}
 			part->Initialise();
+
 			vecParts.push_back(part);
 			vecPickable->push_back(part);
 		}
 	}
-
 
 	for (auto i = vecParts.begin(); i != vecParts.end(); i++)
 	{
@@ -99,6 +94,7 @@ void Cloth::Update(double dTime)
 			vecSprings[i]->setEnabled(false);
 		}
 	}
+	
 }
 
 void Cloth::Draw()
@@ -111,10 +107,8 @@ void Cloth::Draw()
 			vecParts[i]->Draw();
 		}
 	}
-
-	//clothMesh->Draw();
-
 }
+
 
 int Cloth::getNumRows()
 {

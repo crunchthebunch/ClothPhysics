@@ -588,6 +588,9 @@
     <ClCompile Include="capsule.cpp">
       <Filter>Source Files\ClothProject</Filter>
     </ClCompile>
+    <ClCompile Include="fan.cpp">
+      <Filter>Source Files\ClothProject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assetloader.h">
@@ -1401,6 +1404,9 @@
       <Filter>Header Files\ClothProject</Filter>
     </ClInclude>
     <ClInclude Include="capsule.h">
+      <Filter>Header Files\ClothProject</Filter>
+    </ClInclude>
+    <ClInclude Include="fan.h">
       <Filter>Header Files\ClothProject</Filter>
     </ClInclude>
   </ItemGroup>

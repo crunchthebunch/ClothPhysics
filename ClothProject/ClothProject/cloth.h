@@ -17,6 +17,10 @@ public:
 	virtual void Update(double dTime);
 	virtual void Draw();
 
+	void InitMesh();
+	void InitDraw();
+	
+
 	int getNumRows();
 	int getNumCols();
 
@@ -34,15 +38,44 @@ private:
 	std::vector<ClothPart*> vecParts;
 	std::vector<btGeneric6DofConstraint*> vecSprings;
 	std::vector<GameObject*>* vecPickable;
+	std::vector<GLfloat> vecPartsVertices;
 
 	float width;
 	float height;
 	int numRows;
 	int numCols;
 
-
-
 	Mesh* clothMesh;
 
 	float cellSpacing;
+
+	GLuint VAO;
+	GLuint EBO;
+	GLuint program;
+	GLuint modelLoc;
+	GLuint transInvModelLoc;
+	GLuint texLoc;
+	GLuint ambientStrLoc;
+	GLuint ambientColorLoc;
+	GLuint lightColorLoc;
+	GLuint lightPosLoc;
+	GLuint camPosLoc;
+	GLuint MVPLoc;
+	GLuint skyBoxLoc;
+	GLuint skyBoxTexture;
+
+	float ambientStr;
+	glm::vec3 ambientColor;
+	glm::vec3 lightColor;
+	glm::vec3 lightPos;
+	glm::vec3 camPos;
+
+	glm::vec3 fillColor;
+	glm::vec2 texOffset;
+	glm::vec2 texScale;
+	glm::mat4 model;
+	glm::mat4 transInvModel;
+	glm::mat4 view;
+	glm::mat4 proj;
+	glm::mat4 MVP;
 };

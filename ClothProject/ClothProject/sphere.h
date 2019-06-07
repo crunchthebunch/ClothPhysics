@@ -2,7 +2,10 @@
 #include "level.h"
 #include "model.h"
 #include "terrain.h"
+#include "meshsphere.h"
 #include "physicsmanager.h"
+
+class MeshSphere;
 
 class Sphere : public GameObject
 {
@@ -24,6 +27,7 @@ private:
 	Model* model;
 	Model* stencil;
 	Terrain* terrain;
+	MeshSphere* meshSphere;
 
 	bool isHeld;
 };

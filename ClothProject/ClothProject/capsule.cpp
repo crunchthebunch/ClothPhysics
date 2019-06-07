@@ -18,6 +18,7 @@ Capsule::Capsule(Level * _level, PhysicsManager* _physicsManager, Terrain * _ter
 	yRot = 1.0f;
 	zRot = 0.0f;
 	rotationAngle = 0.0f;
+	
 
 	isHeld = false;
 }
@@ -30,13 +31,13 @@ Capsule::~Capsule()
 
 void Capsule::Initialise()
 {
-	SetUniformScale(0.05f);
+	SetUniformScale(2.0f);
 
-	model = new Model("Assets/CubeModel.obj", this);
-	stencil = new  Model("Assets/StencilModel.obj", this);
+	model = new Model("Assets/CapsuleModel.obj", this);
+	//stencil = new  Model("Assets/StencilModel.obj", this);
 
 	//Physics
-	colShape = new btCapsuleShape(1.0f, 3.0f);
+	colShape = new btCapsuleShape(2.0f, 6.0f);
 	physics->GetCollisionShapes()->push_back(colShape);
 
 	btTransform startTransform;
@@ -50,7 +51,7 @@ void Capsule::Initialise()
 	startTransform.setOrigin(btVector3(x, y, z));
 
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia*2);
 
 	body = new btRigidBody(rbInfo);
 
@@ -115,28 +116,8 @@ void Capsule::Update(double dTime)
 
 void Capsule::Draw()
 {
-	//Enable the stencil test
-	glEnable(GL_STENCIL_TEST);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-
-	//1st pass
-	glStencilFunc(GL_ALWAYS, 1, 0xFF);
-	glStencilMask(0xFF);
-	glClear(GL_STENCIL_BUFFER_BIT);
-
 	//Render regular cube
 	model->Draw();
-
-	//2nd pass
-	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-	glStencilMask(0x00);
-
-	//Render scaled up cube
-	stencil->Draw();
-
-	//Disable writing to stencil mask
-	glStencilMask(0x00);
-	glDisable(GL_STENCIL_TEST);
 }
 
 void Capsule::MousePressing()

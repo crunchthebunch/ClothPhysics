@@ -48,7 +48,7 @@ void Cube::Initialise()
 	startTransform.setOrigin(btVector3(x, y, z));
 
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia*2);
 
 	body = new btRigidBody(rbInfo);
 

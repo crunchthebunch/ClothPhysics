@@ -327,6 +327,7 @@
     <ClCompile Include="Dependencies\bullet\src\LinearMath\TaskScheduler\btTaskScheduler.cpp" />
     <ClCompile Include="Dependencies\bullet\src\LinearMath\TaskScheduler\btThreadSupportPosix.cpp" />
     <ClCompile Include="Dependencies\bullet\src\LinearMath\TaskScheduler\btThreadSupportWin32.cpp" />
+    <ClCompile Include="fan.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gameobject.cpp" />
     <ClCompile Include="meshsphere.cpp" />
@@ -598,6 +599,7 @@
     <ClInclude Include="Dependencies\bullet\src\LinearMath\btTransformUtil.h" />
     <ClInclude Include="Dependencies\bullet\src\LinearMath\btVector3.h" />
     <ClInclude Include="Dependencies\bullet\src\LinearMath\TaskScheduler\btThreadSupportInterface.h" />
+    <ClInclude Include="fan.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gameobject.h" />
     <ClInclude Include="physicslevel.h" />
