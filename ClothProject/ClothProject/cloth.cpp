@@ -110,6 +110,11 @@ void Cloth::Draw()
 }
 
 
+std::vector<ClothPart*> Cloth::getVecParts()
+{
+	return vecParts;
+}
+
 int Cloth::getNumRows()
 {
 	return numRows;
@@ -118,6 +123,16 @@ int Cloth::getNumRows()
 int Cloth::getNumCols()
 {
 	return numCols;
+}
+
+void Cloth::setNumRows(int value)
+{
+	numRows = value;
+}
+
+void Cloth::setNumCols(int value)
+{
+	numCols = value;
 }
 
 void Cloth::CreateSpring(btRigidBody * bodyA, btRigidBody * bodyB)

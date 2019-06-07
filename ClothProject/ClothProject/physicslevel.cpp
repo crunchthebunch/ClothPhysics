@@ -83,6 +83,9 @@ void PhysicsLevel::Initialise(Game * _myGame, ShaderLoader * _shaderloader, Asse
 	//Init Mouse Picker
 	mousePicker = new MousePicker(this, &vecPickable);
 
+	//Init Input Manager
+	inputManager = new InputManager();
+
 	//Init Clock
 	clock = new Clock();
 	clock->Initialise();
@@ -100,6 +103,16 @@ void PhysicsLevel::Initialise(Game * _myGame, ShaderLoader * _shaderloader, Asse
 	Texter* text2 = new Texter("", "Assets/Fonts/arial.ttf", glm::vec3(-730.0f, 400.0f, 2.0f), shaderLoader, assetLoader, levelCamera);
 	text2->SetColor(glm::vec3(0.8f, 0.0f, 0.6f));
 	vecTexts.push_back(text2);
+
+	lengthChange = new Texter("Length of Cloth: ", "Assets/Fonts/arial.ttf", glm::vec3(500.0f, 400.0f, 2.0f), shaderLoader, assetLoader, levelCamera);
+	lengthChange->SetColor(glm::vec3(0.8f, 0.9f, 1.0f));
+	lengthChange->SetScale(0.5f);
+	vecTexts.push_back(lengthChange);
+
+	widthChange = new Texter("Width of Cloth: ", "Assets/Fonts/arial.ttf", glm::vec3(500.0f, 300.0f, 2.0f), shaderLoader, assetLoader, levelCamera);
+	widthChange->SetColor(glm::vec3(0.8f, 0.9f, 1.0f));
+	widthChange->SetScale(0.5f);
+	vecTexts.push_back(widthChange);
 
 	//Init Sky Box Cubemap
 	std::vector<std::string> vecCubeMapPaths;
@@ -155,7 +168,7 @@ void PhysicsLevel::Initialise(Game * _myGame, ShaderLoader * _shaderloader, Asse
 	vecPickable.push_back(capsule);
 
 	//Init Cloth
-	Cloth* cloth = new Cloth(this, physicsManager);
+	cloth = new Cloth(this, physicsManager);
 	cloth->SetVecPickable(&vecPickable);
 	cloth->SetY(50.0f);
 	cloth->Initialise();
@@ -192,12 +205,31 @@ void PhysicsLevel::Update()
 			vecObjects[i]->Update(deltaTime);
 		}
 	}
+	
+	// Global wind
+	for (unsigned int i = 0; i < cloth->getVecParts().size(); i++)
+	{
+		ClothPart* obj = cloth->getVecParts()[i];
+		btRigidBody* body = obj->GetBody();
+
+		float r1 = -1.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.0f - (-1.0f))));
+		float r2 = -1.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.0f - (-1.0f))));
+
+		body->applyCentralForce(btVector3(r1, 0.0f, r2));
+	}
+
+
+	lengthChange->SetText("Length of Cloth : " + std::to_string(cloth->getNumRows()));
+	widthChange->SetText("Width of Cloth : " + std::to_string(cloth->getNumCols()));
 
 	//Update ScreenQuad
 	screenQuad->Update(deltaTime);
 
 	//Update Mouse Picker
 	MousePicking();
+
+	// Process key inputs
+	ProcessInput();
 
 	//static bool wToggle = true;
 	//static float wToggleDelay = 0.0f;
@@ -312,6 +344,39 @@ void PhysicsLevel::ControlCamera()
 	levelCamera->SetCamPos(levelCamera->GetCamPos() + camMovement);
 }
 
+void PhysicsLevel::ProcessInput()
+{
+	if (inputManager->GetKeyState('i') == KEY_DOWN)
+	{
+		int temp = cloth->getNumCols();
+		cloth->setNumCols(temp++);
+	}
+
+	if (inputManager->GetKeyState('k') == KEY_DOWN)
+	{
+		int temp = cloth->getNumCols();
+		cloth->setNumCols(temp--);
+	}
+
+	if (inputManager->GetKeyState(GLUT_KEY_LEFT) == KEY_DOWN)
+	{
+		int temp = cloth->getNumRows();
+		cloth->setNumRows(temp++);
+	}
+
+	if (inputManager->GetKeyState(GLUT_KEY_RIGHT) == KEY_DOWN)
+	{
+		int temp = cloth->getNumRows();
+		cloth->setNumRows(temp--);
+	}
+
+	if (inputManager->GetKeyState('r') == KEY_UP)
+	{
+
+	}
+
+}
+
 void PhysicsLevel::MousePicking()
 {
 	mousePicker->UpdateMousePicker();
@@ -340,3 +405,10 @@ void PhysicsLevel::MousePicking()
 		text->SetText("");
 	}
 }
+
+void PhysicsLevel::ResetLevel()
+{
+
+}
+
+

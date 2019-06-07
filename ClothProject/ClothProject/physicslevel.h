@@ -4,9 +4,13 @@
 #include "sphere.h"
 #include "capsule.h"
 #include "pyramid.h"
+#include "cloth.h"
+#include "clothpart.h"
 #include "screenquad.h"
 
 class PhysicsManager;
+class Cloth;
+class ClothPart;
 
 class PhysicsLevel : public Level
 {
@@ -20,7 +24,10 @@ public:
 
 	void ControlCamera();
 
+	void ProcessInput();
 	void MousePicking();
+
+	void ResetLevel();
 
 private:
 	PhysicsManager* physicsManager;
@@ -29,11 +36,14 @@ private:
 	bool isPostFX;
 
 	Texter* text;
+	Texter* lengthChange;
+	Texter* widthChange;
 
 	Cube* cube;
 	Sphere* sphere;
 	Pyramid* pyramid;
 	Capsule* capsule;
+	Cloth* cloth;
 
 	GLuint FBO;
 	GLuint RBO;

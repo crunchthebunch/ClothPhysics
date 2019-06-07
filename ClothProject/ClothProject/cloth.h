@@ -20,9 +20,13 @@ public:
 	void InitMesh();
 	void InitDraw();
 	
+	std::vector<ClothPart*> getVecParts();
 
 	int getNumRows();
 	int getNumCols();
+
+	void setNumRows(int value);
+	void setNumCols(int value);
 
 	void SetVecPickable(std::vector<GameObject*>* _vecPickable);
 	ClothPart* FindPart(int _x, int _y);
