@@ -33,7 +33,7 @@ private:
 	Cube* cube;
 	Sphere* sphere;
 	Pyramid* pyramid;
-	//Capsule* capsule;
+	Capsule* capsule;
 
 	GLuint FBO;
 	GLuint RBO;

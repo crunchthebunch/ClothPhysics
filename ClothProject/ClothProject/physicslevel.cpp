@@ -141,18 +141,18 @@ void PhysicsLevel::Initialise(Game * _myGame, ShaderLoader * _shaderloader, Asse
 	vecPickable.push_back(sphere);
 
 	//Init Pyramid
-	pyramid = new Pyramid(this, physicsManager, terrain);
-	pyramid->SetY(20.0f);
-	pyramid->Initialise();
-	vecObjects.push_back(pyramid);
-	vecPickable.push_back(pyramid);
+	//pyramid = new Pyramid(this, physicsManager, terrain);
+	//pyramid->SetY(20.0f);
+	//pyramid->Initialise();
+	//vecObjects.push_back(pyramid);
+	//vecPickable.push_back(pyramid);
 
 	//Init Capsule
-	//capsule = new Capsule(this, physicsManager, terrain);
-	//capsule->SetY(20.0f);
-	//capsule->Initialise();
-	//vecObjects.push_back(capsule);
-	//vecPickable.push_back(capsule);
+	capsule = new Capsule(this, physicsManager, terrain);
+	capsule->SetY(20.0f);
+	capsule->Initialise();
+	vecObjects.push_back(capsule);
+	vecPickable.push_back(capsule);
 
 	//Init Cloth
 	Cloth* cloth = new Cloth(this, physicsManager);

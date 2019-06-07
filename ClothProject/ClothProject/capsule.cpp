@@ -80,19 +80,35 @@ void Capsule::Update(double dTime)
 
 	deltaTime = (float)dTime;
 	model->Update(deltaTime);
-	stencil->Update(deltaTime);
 
 	if (isHeld)
 	{
 		glm::vec3 pos = camera->GetCamPos();
+		glm::vec3 moveTo = pos - GetPosition();
+		moveTo.y -= 5.0f;
+		moveTo.z -= 20.0f;
+		moveTo *= 5.0f;
 
-		btTransform newTrans = body->getWorldTransform();
-		newTrans.getOrigin() = (btVector3(pos.x, pos.y - 5.0f, pos.z - 40.0f));
-		body->setWorldTransform(newTrans);
+		body->activate(true);
+		body->setLinearVelocity(btVector3(moveTo.x, moveTo.y, moveTo.z));
 	}
-	if (inputManager->GetMouseState(MOUSE_LEFT) != KEY_DOWN)
+
+	//Dropping the object
+	if (inputManager->GetMouseState(MOUSE_LEFT) == KEY_UP && isHeld == true)
 	{
 		isHeld = false;
+		body->activate(true);
+		body->applyCentralImpulse(btVector3(0.0f, 10.0f, -100.0f));
+	}
+
+	//Constraining object to level bounds
+	if (x > 120.0f || x < -120.0f || z > 120.0f || z < -120.0f)
+	{
+		glm::vec3 moveTo = -GetPosition();
+		glm::normalize(moveTo);
+		moveTo *= 0.1f;
+
+		body->setLinearVelocity(btVector3(moveTo.x, moveTo.y, moveTo.z));
 	}
 
 }

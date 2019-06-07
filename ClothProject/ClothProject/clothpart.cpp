@@ -1,9 +1,14 @@
 #include "clothpart.h"
 #include "cubemap.h"
+#include "cloth.h"
 
-ClothPart::ClothPart(Level * _level, PhysicsManager * _physicsManager)
+ClothPart::ClothPart(Level * _level, PhysicsManager * _physicsManager, Cloth* cloth, int row, int col)
 {
 	this->level = _level;
+	this->cloth = cloth;
+	this->row = row;
+	this->col = col;
+
 	VBO = level->GetVBO();
 	camera = level->GetCamera();
 	inputManager = level->GetInputManager();
@@ -19,6 +24,7 @@ ClothPart::ClothPart(Level * _level, PhysicsManager * _physicsManager)
 	rotationAngle = 0.0f;
 	isDebugDraw = true;
 	isStatic = false;
+	inCorner = false;
 }
 
 ClothPart::~ClothPart()
@@ -30,6 +36,8 @@ void ClothPart::Initialise()
 {
 	sphere = new MeshSphere(this, skyBoxTexture);
 	sphere->InitMesh("Assets/cube.png", "cube", 0.0f, 1, 1, 1, 0, 1024, 1024);
+
+
 
 	//Physics Sphere
 	btCollisionShape* colShape = new btSphereShape(btScalar(1.0f));
@@ -117,15 +125,17 @@ void ClothPart::Draw()
 		sphere->Draw();
 	}
 
-	//glFrontFace(GL_CW);
+	if (col < cloth->getNumCols() - 1 && row < cloth->getNumRows() - 1)
+	{
+		glFrontFace(GL_CW);
 
-	//glBegin(GL_TRIANGLE_STRIP);
-	//glVertex3f(0.0f, 1.0f, 0.0f); //vertex 1
-	//glVertex3f(0.0f, 0.0f, 0.0f); //vertex 2
-	//glVertex3f(1.0f, 1.0f, 0.0f); //vertex 3
-	//glVertex3f(1.5f, 0.0f, 0.0f); //vertex 4
-	//glEnd();
-
+		glBegin(GL_TRIANGLE_STRIP);
+		glVertex3f(x, y, z); //vertex 1
+		glVertex3f(part2->GetPosition().x, part2->GetPosition().y, part2->GetPosition().z); //vertex 2
+		glVertex3f(part1->GetPosition().x, part1->GetPosition().y, part1->GetPosition().z); //vertex 3
+		glVertex3f(part3->GetPosition().x, part3->GetPosition().y, part3->GetPosition().z); //vertex 4
+		glEnd();
+	}
 }
 
 void ClothPart::MousePressing()
@@ -144,4 +154,15 @@ void ClothPart::SetIsStatic(bool _static)
 btRigidBody * ClothPart::GetBody()
 {
 	return body;
+}
+
+void ClothPart::SetParts()
+{
+
+	if (col < cloth->getNumCols() - 1 && row < cloth->getNumRows() - 1)
+	{
+		part1 = cloth->FindPart(row, col + 1);
+		part2 = cloth->FindPart(row + 1, col);
+		part3 = cloth->FindPart(row + 1, col + 1);
+	}
 }

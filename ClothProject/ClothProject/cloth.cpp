@@ -56,7 +56,7 @@ void Cloth::Initialise()
 		for (int j = 0; j < numCols; j++)
 		{
 			ClothPart* part;
-			part = new ClothPart(level, physics);
+			part = new ClothPart(level, physics, this, i, j);
 			part->SetX((cellSpacing*j) - halfW);
 			part->SetY((cellSpacing*i) + halfH);
 
@@ -64,11 +64,17 @@ void Cloth::Initialise()
 			{
 				part->SetIsStatic(true);
 			}
-
 			part->Initialise();
 			vecParts.push_back(part);
 			vecPickable->push_back(part);
 		}
+	}
+
+
+	for (auto i = vecParts.begin(); i != vecParts.end(); i++)
+	{
+		ClothPart* temp = *i;
+		temp->SetParts();
 	}
 
 	ConstrainParts();
@@ -108,6 +114,16 @@ void Cloth::Draw()
 
 	//clothMesh->Draw();
 
+}
+
+int Cloth::getNumRows()
+{
+	return numRows;
+}
+
+int Cloth::getNumCols()
+{
+	return numCols;
 }
 
 void Cloth::CreateSpring(btRigidBody * bodyA, btRigidBody * bodyB)

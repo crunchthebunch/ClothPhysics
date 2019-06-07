@@ -17,12 +17,16 @@ public:
 	virtual void Update(double dTime);
 	virtual void Draw();
 
+	int getNumRows();
+	int getNumCols();
+
 	void SetVecPickable(std::vector<GameObject*>* _vecPickable);
+	ClothPart* FindPart(int _x, int _y);
 
 private:
 	void CreateSpring(btRigidBody* bodyA, btRigidBody* bodyB);
 	void ConstrainParts();
-	ClothPart* FindPart(int _x, int _y);
+	
 
 private:
 	PhysicsManager * physics;
@@ -35,6 +39,8 @@ private:
 	float height;
 	int numRows;
 	int numCols;
+
+
 
 	Mesh* clothMesh;
 
