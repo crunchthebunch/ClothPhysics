@@ -13,6 +13,7 @@ PhysicsLevel::PhysicsLevel()
 	isWireframe = false;
 	isPostFX = false;
 	physicsManager = new PhysicsManager();
+	isHolding = false;
 }
 
 PhysicsLevel::~PhysicsLevel()
@@ -199,6 +200,11 @@ void PhysicsLevel::Update()
 	//Update Mouse Picker
 	MousePicking();
 
+	if (isHolding == true && inputManager->GetMouseState(MOUSE_LEFT) == KEY_UP)
+	{
+		isHolding = false;
+	}
+
 	//static bool wToggle = true;
 	//static float wToggleDelay = 0.0f;
 
@@ -315,6 +321,7 @@ void PhysicsLevel::ControlCamera()
 void PhysicsLevel::MousePicking()
 {
 	mousePicker->UpdateMousePicker();
+
 	if (mousePicker->CheckMouseCollision())
 	{
 		std::vector<GameObject*>::iterator it;
@@ -324,8 +331,9 @@ void PhysicsLevel::MousePicking()
 
 			if (mousePicker->GetPickedObject() == obj)
 			{
-				if (inputManager->GetMouseState(MOUSE_LEFT) == KEY_DOWN)
+				if (inputManager->GetMouseState(MOUSE_LEFT) == KEY_DOWN && isHolding == false)
 				{
+					isHolding = true;
 					obj->MousePressing();
 				}
 				else

@@ -86,7 +86,7 @@ void Cloth::Update(double dTime)
 		}
 	}
 
-	//Disable torn parts
+	//Disable torn springs
 	for (unsigned int i = 0; i < vecSprings.size(); i++)
 	{
 		if (vecSprings[i]->getAppliedImpulse() >= 2.5f)
@@ -109,7 +109,6 @@ void Cloth::Draw()
 	}
 }
 
-
 int Cloth::getNumRows()
 {
 	return numRows;
@@ -118,6 +117,11 @@ int Cloth::getNumRows()
 int Cloth::getNumCols()
 {
 	return numCols;
+}
+
+float Cloth::GetCellSpacing() const
+{
+	return cellSpacing;
 }
 
 void Cloth::CreateSpring(btRigidBody * bodyA, btRigidBody * bodyB)
@@ -138,17 +142,17 @@ void Cloth::CreateSpring(btRigidBody * bodyA, btRigidBody * bodyB)
 
 	//Enable X
 	spring->enableSpring(0, true);
-	spring->setStiffness(0, 1.0f);
+	spring->setStiffness(0, 0.5f);
 	spring->setDamping(0, 5.0f);
 
 	//Enable Y
 	spring->enableSpring(1, true);
-	spring->setStiffness(1, 1.0f);
+	spring->setStiffness(1, 0.5f);
 	spring->setDamping(1, 5.0f);
 
 	//Enable Z
 	spring->enableSpring(2, true);
-	spring->setStiffness(2, 1.0f);
+	spring->setStiffness(2, 0.5f);
 	spring->setDamping(2, 5.0f);
 
 	//Enable X

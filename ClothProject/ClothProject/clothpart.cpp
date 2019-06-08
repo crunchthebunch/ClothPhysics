@@ -22,9 +22,19 @@ ClothPart::ClothPart(Level * _level, PhysicsManager * _physicsManager, Cloth* cl
 	yRot = 1.0f;
 	zRot = 0.0f;
 	rotationAngle = 0.0f;
-	isDebugDraw = true;
+	isDebugDraw = false;
 	isStatic = false;
-	inCorner = false;
+	isEndPart = false;
+	ambientStr = 0.01f;
+	ambientColor = glm::vec3(1.0f, 1.0f, 1.0f);
+	lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+	lightPos = glm::vec3(-200.0f, -600.0f, -300.0f);
+
+	isPart1Detached = false;
+	isPart2Detached = false;
+	isPart3Detached = false;
+
+	overlap = 0.1f;
 }
 
 ClothPart::~ClothPart()
@@ -52,7 +62,7 @@ void ClothPart::Initialise()
 
 	if (!isStatic)
 	{
-		mass = 0.1f;
+		mass = 0.05f;
 		colShape->calculateLocalInertia(mass, localInertia);
 	}
 
@@ -65,6 +75,9 @@ void ClothPart::Initialise()
 	physics->GetWorld()->addRigidBody(body);
 
 	//Init quad
+	float ambientFactor = float(col + 1 / cloth->getNumCols());
+	ambientStr = 0.001f * ambientFactor;
+
 	InitQuad();
 }
 
@@ -97,9 +110,9 @@ void ClothPart::Update(double dTime)
 	{
 		glm::vec3 pos = camera->GetCamPos();
 		glm::vec3 moveTo = pos - GetPosition();
-		moveTo.y -= 0.0f;
-		moveTo.z -= 50.0f;
-		moveTo *= 1.0f;
+		moveTo.y -= 10.0f;
+		moveTo.z -= 40.0f;
+		moveTo *= 2.0f;
 
 		body->activate(true);
 		body->setLinearVelocity(btVector3(moveTo.x, moveTo.y, moveTo.z));
@@ -125,14 +138,15 @@ void ClothPart::Update(double dTime)
 
 void ClothPart::Draw()
 {
-	float offset = 1.0f;
-
 	if (isDebugDraw)
 	{
-		//sphere->Draw();
+		sphere->Draw();
 	}
 
-	DrawQuad();
+	if (!isEndPart)
+	{
+		DrawQuad();
+	}
 }
 
 void ClothPart::MousePressing()
@@ -155,19 +169,44 @@ btRigidBody * ClothPart::GetBody()
 
 void ClothPart::SetParts()
 {
-
 	if (col < cloth->getNumCols() - 1 && row < cloth->getNumRows() - 1)
 	{
 		part1 = cloth->FindPart(row, col + 1);
 		part2 = cloth->FindPart(row + 1, col);
 		part3 = cloth->FindPart(row + 1, col + 1);
+		isEndPart = false;
 	}
+	else
+	{
+		isEndPart = true;
+	}
+
+	//TexCoord Setup
+	float texW = float(1.0f / cloth->getNumRows());
+	float texH = -float(1.0f / cloth->getNumCols());
+	float texCoordX = texW * row;
+	float texCoordY = texH * col;
+	float texCoordW = texW * (row + 1.0f);
+	float texCoordH = texH * (col + 1.0f);
+
+	//Part 0
+	quadVerts[6] = texCoordX;
+	quadVerts[7] = texCoordY;
+	//Part 1
+	quadVerts[14] = texCoordX;
+	quadVerts[15] = texCoordH;
+	//Part 2
+	quadVerts[22] = texCoordW;
+	quadVerts[23] = texCoordY;
+	//Part 3
+	quadVerts[30] = texCoordW;
+	quadVerts[31] = texCoordH;
 }
 
 void ClothPart::InitQuad()
 {
-	texture = assetLoader->CreateTexture("Assets/cube.png", "cube");
-	program = shaderLoader->CreateProgram("Assets/VertexShader3D.vs", "Assets/FragmentShaderRimModel.fs", "vertShader3D0", "fragShaderRimModel0");
+	texture = assetLoader->CreateTexture("Assets/varun.png", "varun");
+	program = shaderLoader->CreateProgram("Assets/ClothVert.vs", "Assets/ClothFrag.fs", "clothVert", "clothFrag");
 
 	//VBO
 	glEnable(GL_TEXTURE_2D);
@@ -194,11 +233,6 @@ void ClothPart::InitQuad()
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
 
-	//Backface Culling
-	//glCullFace(GL_BACK);
-	//glFrontFace(GL_CCW);
-	//glEnable(GL_CULL_FACE);
-
 	//Get Uniform Locations
 	modelLoc = glGetUniformLocation(program, "model");
 	transInvModelLoc = glGetUniformLocation(program, "transInvModel");
@@ -217,13 +251,18 @@ void ClothPart::UpdateQuad(float dTime)
 {
 	deltaTime = (float)dTime;
 
+	if (!isEndPart)
+	{
+		UpdateVertices();
+	}
+
 	////Position
 	glm::vec3 objPosition = glm::vec3(x, y, z);
 	glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), objPosition);
 
 	//Rotation
-	glm::vec3 rotationAxisZ = glm::vec3(xRot, yRot, zRot);
-	glm::mat4 rotationZ = glm::rotate(glm::mat4(1.0f), glm::radians(rotationAngle), rotationAxisZ);
+	glm::vec3 rotationAxisZ = glm::vec3(0, 1, 0);
+	glm::mat4 rotationZ = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), rotationAxisZ);
 
 	//Scale
 	glm::vec3 objScale = glm::vec3(xScale, yScale, zScale);
@@ -247,7 +286,7 @@ void ClothPart::UpdateQuad(float dTime)
 	//Texture Coordinate Offset & Scale
 	camPos = camera->GetCamPos();
 
-	glutPostRedisplay();
+	//glutPostRedisplay();
 }
 
 void ClothPart::DrawQuad()
@@ -303,4 +342,71 @@ void ClothPart::DrawQuad()
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+}
+
+void ClothPart::UpdateVertices()
+{
+	//Find positions
+	glm::vec3 part1Pos = part1->GetPosition() - GetPosition();
+	glm::vec3 part2Pos = part2->GetPosition() - GetPosition();
+	glm::vec3 part3Pos = part3->GetPosition() - GetPosition();
+
+	//Check if any part has disconnected
+	float detachDist = cloth->GetCellSpacing() * 4.5f;
+
+	float part1Dist = glm::distance(part1->GetPosition(), GetPosition());
+	float part2Dist = glm::distance(part2->GetPosition(), GetPosition());
+	float part3Dist = glm::distance(part3->GetPosition(), GetPosition());
+
+	if (part1Dist > detachDist) { isPart1Detached = true; }
+	if (part2Dist > detachDist) { isPart2Detached = true; }
+	if (part3Dist > detachDist) { isPart3Detached = true; }
+
+	//Change the positions within the vertex array
+	//Part 1
+	if (!isPart1Detached)
+	{
+		quadVerts[8] = part1Pos.x;
+		quadVerts[9] = part1Pos.y + overlap;
+		quadVerts[10] = part1Pos.z;
+	}
+	else
+	{
+		quadVerts[8] = 0.0f;
+		quadVerts[9] = 0.0f;
+		quadVerts[10] = 0.0f;
+	}
+
+	//Part 2
+	if (!isPart2Detached)
+	{
+		quadVerts[16] = part2Pos.x + overlap;
+		quadVerts[17] = part2Pos.y;
+		quadVerts[18] = part2Pos.z;
+	}
+	else
+	{
+		quadVerts[16] = 0.0f;
+		quadVerts[17] = 0.0f;
+		quadVerts[18] = 0.0f;
+	}
+
+	//Part 3
+	if (!isPart3Detached)
+	{
+		quadVerts[24] = part3Pos.x + overlap;
+		quadVerts[25] = part3Pos.y + overlap;
+		quadVerts[26] = part3Pos.z + overlap;
+	}
+	else
+	{
+		quadVerts[24] = 0.0f;
+		quadVerts[25] = 0.0f;
+		quadVerts[26] = 0.0f;
+	}
+
+	//Updating the vertex array
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVerts), &quadVerts, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

@@ -17,12 +17,10 @@ public:
 	virtual void Update(double dTime);
 	virtual void Draw();
 
-	void InitMesh();
-	void InitDraw();
-	
-
 	int getNumRows();
 	int getNumCols();
+
+	float GetCellSpacing() const;
 
 	void SetVecPickable(std::vector<GameObject*>* _vecPickable);
 	ClothPart* FindPart(int _x, int _y);

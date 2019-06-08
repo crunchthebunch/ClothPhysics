@@ -31,6 +31,8 @@ public:
 	void UpdateQuad(float dTime);
 	void DrawQuad();
 
+	void UpdateVertices();
+
 private:
 	PhysicsManager * physics;
 	btRigidBody* body;
@@ -39,11 +41,16 @@ private:
 	bool isDebugDraw;
 	bool isStatic;
 	bool isHeld;
-	bool inCorner;
+	bool isEndPart;
 
+	float overlap;
 	ClothPart* part1;
 	ClothPart* part2;
 	ClothPart* part3;
+
+	bool isPart1Detached;
+	bool isPart2Detached;
+	bool isPart3Detached;
 
 	Cloth* cloth;
 
@@ -51,11 +58,11 @@ private:
 	{
 		//---------------------------------------------------- First Triangle (Left-bottom)
 		// Position			 // Color			 //Tex Coords
-		-1.0f, -1.0f, 0.0f,	 0.0f, 1.0f, 1.0f,	 0.0f, 1.0f,	//Left
-		1.0f, -1.0f, 0.0f,	 1.0f, 0.0f, 1.0f,	 1.0f, 1.0f,	//Right
-		-1.0f,  1.0f, 0.0f,	 1.0f, 1.0f, 0.0f,	 0.0f, 0.0f,	//Top
+		0.0f, 0.0f, 0.0f,	 1.0f, 1.0f, 1.0f,	 0.0f, 1.0f,	//Left
+		1.0f, 0.0f, 0.0f,	 1.0f, 1.0f, 1.0f,	 1.0f, 1.0f,	//Right
+		0.0f,  1.0f, 0.0f,	 1.0f, 1.0f, 1.0f,	 0.0f, 0.0f,	//Top
 		//----------------------------------------------------- Second Triangle (Right-top)
-		1.0f,  1.0f, 0.0f,	 0.0f, 1.0f, 1.0f,	 1.0f, 0.0f		//Left
+		1.0f,  1.0f, 0.0f,	 1.0f, 1.0f, 1.0f,	 1.0f, 0.0f		//Left
 	};
 
 	GLuint quadIndices[6] =
