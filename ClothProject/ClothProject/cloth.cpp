@@ -119,6 +119,21 @@ int Cloth::getNumCols()
 	return numCols;
 }
 
+void Cloth::setNumCols(int value)
+{
+	numCols = value;
+}
+
+void Cloth::setNumRows(int value)
+{
+	numRows = value;
+}
+
+std::vector<ClothPart*> Cloth::getVecParts()
+{
+	return vecParts;
+}
+
 float Cloth::GetCellSpacing() const
 {
 	return cellSpacing;

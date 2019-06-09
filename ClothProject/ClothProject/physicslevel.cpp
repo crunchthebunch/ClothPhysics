@@ -85,7 +85,7 @@ void PhysicsLevel::Initialise(Game * _myGame, ShaderLoader * _shaderloader, Asse
 	mousePicker = new MousePicker(this, &vecPickable);
 
 	//Init Input Manager
-	inputManager = new InputManager();
+	//inputManager = new InputManager();
 
 	//Init Clock
 	clock = new Clock();

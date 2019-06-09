@@ -19,6 +19,10 @@ public:
 
 	int getNumRows();
 	int getNumCols();
+	void setNumCols(int value);
+	void setNumRows(int value);
+
+	std::vector<ClothPart*> getVecParts();
 
 	float GetCellSpacing() const;
 
