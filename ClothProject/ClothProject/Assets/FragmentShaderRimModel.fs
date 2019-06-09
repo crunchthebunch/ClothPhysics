@@ -20,7 +20,7 @@ uniform int rimExponent = 4;
 uniform vec3 rimColor = vec3(1.0f, 1.0f, 1.0f);
 
 uniform samplerCube skybox;
-uniform float reflectStr = 0.01f;
+uniform float reflectStr = 0.2f;
 
 void main(void)
 {

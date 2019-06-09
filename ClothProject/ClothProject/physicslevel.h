@@ -34,6 +34,7 @@ private:
 
 	bool isWireframe;
 	bool isPostFX;
+	bool isHolding;
 
 	Texter* text;
 	Texter* lengthChange;
