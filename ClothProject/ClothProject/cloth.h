@@ -2,6 +2,7 @@
 #include "level.h"
 #include "physicsmanager.h"
 #include "clothpart.h"
+#include "INIParser.h"
 
 //Cloth itself is not an object, but instead is a "manager" for a vector of cloth parts (spheres) that
 //are joined together by constraints so that the cloth can collide and react like cloth.
@@ -10,7 +11,7 @@
 class Cloth : public GameObject
 {
 public:
-	Cloth(Level* _level, PhysicsManager* _physicsManager);
+	Cloth(Level* _level, PhysicsManager* _physicsManager, INIParser* iniParser);
 	virtual ~Cloth();
 
 	virtual void Initialise();
@@ -21,6 +22,8 @@ public:
 	int getNumCols();
 	void setNumCols(int value);
 	void setNumRows(int value);
+
+	void Reset();
 
 	std::vector<ClothPart*> getVecParts();
 
@@ -41,6 +44,8 @@ private:
 	std::vector<btGeneric6DofConstraint*> vecSprings;
 	std::vector<GameObject*>* vecPickable;
 	std::vector<GLfloat> vecPartsVertices;
+
+	INIParser* iniParser;
 
 	float width;
 	float height;

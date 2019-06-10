@@ -1,7 +1,7 @@
 #include "cloth.h"
 #include "cubemap.h"
 
-Cloth::Cloth(Level * _level, PhysicsManager * _physicsManager)
+Cloth::Cloth(Level * _level, PhysicsManager * _physicsManager, INIParser* iniParser)
 {
 	level = _level;
 	physics = _physicsManager;
@@ -11,13 +11,14 @@ Cloth::Cloth(Level * _level, PhysicsManager * _physicsManager)
 	skyBoxTexture = level->GetSkyBox()->GetTexture();
 	width = 32.0f;
 	height = 32.0f;
-	numRows = 15;
-	numCols = 15;
-	cellSpacing = width/numCols;
+	numRows = 0;
+	numCols = 0;
+	//cellSpacing = width/numCols;
 	xRot = 0.0f;
 	yRot = 1.0f;
 	zRot = 0.0f;
 	rotationAngle = 0.0f;
+	this->iniParser = iniParser;
 }
 
 Cloth::~Cloth()
@@ -44,6 +45,11 @@ void Cloth::Initialise()
 	//Create grid of cloth parts constrained by spring constraints
 	float halfW = width * 0.5f;
 	float halfH = height * 0.5f;
+
+	iniParser->GetIntValue("settings", "width", numRows);
+	iniParser->GetIntValue("settings", "width", numCols);
+	iniParser->GetFloatValue("settings", "length", cellSpacing);
+	cellSpacing *= 0.5f;
 
 	//Creating
 	for (int i = 0; i < numRows; i++)
@@ -127,6 +133,42 @@ void Cloth::setNumCols(int value)
 void Cloth::setNumRows(int value)
 {
 	numRows = value;
+}
+
+void Cloth::Reset()
+{
+	float halfW = width * 0.5f;
+	float halfH = height * 0.5f;
+
+	for (int i = 0; i < numRows; i++)
+	{
+		for (int j = 0; j < numCols; j++)
+		{
+			ClothPart* part = vecParts[(i * numRows) + j];
+			part->SetX((cellSpacing*j) - halfW);
+			part->SetY((cellSpacing*i) + halfH);
+			part->SetZ(0.0f);
+
+			if (i == numRows - 1 && Utils::IsEven(j) == true)
+			{
+				part->SetIsStatic(true);
+			}
+
+			part->ResetPosition();
+		}
+	}
+
+	//Enable all springs
+	for (unsigned int i = 0; i < vecSprings.size(); i++)
+	{
+		vecSprings[i]->setEnabled(true);
+	}
+
+	//Reset cloth mesh
+	for (unsigned int i = 0; i < vecParts.size(); i++)
+	{
+		vecParts[i]->ResetMesh();
+	}
 }
 
 std::vector<ClothPart*> Cloth::getVecParts()

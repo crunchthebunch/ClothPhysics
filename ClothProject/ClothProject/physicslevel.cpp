@@ -50,6 +50,9 @@ void PhysicsLevel::Initialise(Game * _myGame, ShaderLoader * _shaderloader, Asse
 	assetLoader = _assetLoader;
 	inputManager = _inputManager;
 
+	iniParser = new INIParser();
+	iniParser->LoadIniFile("settings.ini");
+
 	//Init Physics Manager
 	physicsManager->Initialise();
 
@@ -166,11 +169,19 @@ void PhysicsLevel::Initialise(Game * _myGame, ShaderLoader * _shaderloader, Asse
 	vecPickable.push_back(capsule);
 
 	//Init Cloth
-	cloth = new Cloth(this, physicsManager);
+	cloth = new Cloth(this, physicsManager, iniParser);
 	cloth->SetVecPickable(&vecPickable);
 	cloth->SetY(50.0f);
 	cloth->Initialise();
 	vecObjects.push_back(cloth);
+
+	// Init Fan
+	fan = new Fan(this, physicsManager, terrain, cloth, iniParser);
+	fan->SetY(20.0f);
+	fan->SetZ(10.0f);
+	fan->Initialise();
+	vecObjects.push_back(fan);
+	vecPickable.push_back(fan);
 
 	isInit = true;
 }
@@ -206,7 +217,7 @@ void PhysicsLevel::Update()
 	}
 	
 	// Global wind
-	for (unsigned int i = 0; i < cloth->getVecParts().size(); i++)
+	/*for (unsigned int i = 0; i < cloth->getVecParts().size(); i++)
 	{
 		ClothPart* obj = cloth->getVecParts()[i];
 		btRigidBody* body = obj->GetBody();
@@ -215,7 +226,7 @@ void PhysicsLevel::Update()
 		float r2 = -1.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.0f - (-1.0f))));
 
 		body->applyCentralForce(btVector3(r1, 0.0f, r2));
-	}
+	}*/
 
 
 	lengthChange->SetText("Length of Cloth : " + std::to_string(cloth->getNumRows()));
@@ -292,10 +303,10 @@ void PhysicsLevel::Update()
 			cout << "DETECTED" << endl;
 			//delete(cloth);
 
-			cloth = new Cloth(this, physicsManager);
-			cloth->SetVecPickable(&vecPickable);
-			cloth->SetY(50.0f);
-			cloth->Initialise();
+			cloth->Reset();
+			cube->Reset();
+			sphere->Reset();
+			capsule->Reset();
 			//vecObjects.push_back(cloth);
 			wToggle = false;
 		}

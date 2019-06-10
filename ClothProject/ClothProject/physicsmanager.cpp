@@ -53,6 +53,10 @@ void PhysicsManager::Update(double _dTime)
 	world->stepSimulation((btScalar)_dTime, 10);
 }
 
+void PhysicsManager::Reset()
+{
+}
+
 btAlignedObjectArray<btCollisionShape*>* PhysicsManager::GetCollisionShapes()
 {
 	return &collisionShapes;

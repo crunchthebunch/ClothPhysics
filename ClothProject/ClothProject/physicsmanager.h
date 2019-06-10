@@ -13,6 +13,8 @@ public:
 	void Initialise();
 	void Update(double _dTime);
 
+	void Reset();
+
 	btAlignedObjectArray<btCollisionShape*>* GetCollisionShapes();
 	btSoftRigidDynamicsWorld* GetWorld();
 	btSoftBodyWorldInfo GetSoftInfo() const;

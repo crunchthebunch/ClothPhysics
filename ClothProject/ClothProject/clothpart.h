@@ -33,6 +33,9 @@ public:
 
 	void UpdateVertices();
 
+	void ResetMesh();
+	void ResetPosition();
+
 private:
 	PhysicsManager * physics;
 	btRigidBody* body;

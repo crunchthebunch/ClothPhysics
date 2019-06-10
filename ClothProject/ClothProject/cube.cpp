@@ -37,7 +37,7 @@ void Cube::Initialise()
 	colShape = new btBoxShape(btVector3(3.0f, 3.0f, 3.0f));
 	physics->GetCollisionShapes()->push_back(colShape);
 
-	btTransform startTransform;
+	//btTransform startTransform;
 	startTransform.setIdentity();
 
 	btScalar mass(1.0f);
@@ -121,4 +121,11 @@ void Cube::MousePressing()
 {
 	//Pick up cube and place in front of camera
 	isHeld = true;
+}
+
+void Cube::Reset()
+{
+	body->setAngularVelocity(btVector3(0.0f, 0.0f, 0.0f));
+	body->setLinearVelocity(btVector3(0.0f, 0.0f, 0.0f));
+	body->setWorldTransform(startTransform);
 }

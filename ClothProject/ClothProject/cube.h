@@ -16,6 +16,8 @@ public:
 
 	virtual void MousePressing();
 
+	void Reset();
+
 private:
 	PhysicsManager* physics;
 	btCollisionShape* colShape;
@@ -23,6 +25,7 @@ private:
 	Level* level;
 	Model* model;
 	Terrain* terrain;
+	btTransform startTransform;
 
 	bool isHeld;
 };

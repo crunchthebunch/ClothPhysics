@@ -4,9 +4,11 @@
 #include "sphere.h"
 #include "capsule.h"
 #include "pyramid.h"
+#include "fan.h"
 #include "cloth.h"
 #include "clothpart.h"
 #include "screenquad.h"
+#include "INIParser.h"
 
 class PhysicsManager;
 class Cloth;
@@ -42,11 +44,14 @@ private:
 	Texter* lengthChange;
 	Texter* widthChange;
 
+	Fan* fan;
 	Cube* cube;
 	Sphere* sphere;
 	Pyramid* pyramid;
 	Capsule* capsule;
 	Cloth* cloth;
+
+	INIParser* iniParser;
 
 	GLuint FBO;
 	GLuint RBO;

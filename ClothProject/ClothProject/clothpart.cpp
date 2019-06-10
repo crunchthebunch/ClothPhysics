@@ -410,3 +410,21 @@ void ClothPart::UpdateVertices()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVerts), &quadVerts, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
+
+void ClothPart::ResetMesh()
+{
+	isPart1Detached = false;
+	isPart2Detached = false;
+	isPart3Detached = false;
+}
+
+void ClothPart::ResetPosition()
+{
+	body->setAngularVelocity(btVector3(0.0f, 0.0f, 0.0f));
+	body->setLinearVelocity(btVector3(0.0f, 0.0f, 0.0f));
+
+	btTransform startTransform;
+	startTransform.setIdentity();
+	startTransform.setOrigin(btVector3(x, y, z));
+	body->setWorldTransform(startTransform);
+}

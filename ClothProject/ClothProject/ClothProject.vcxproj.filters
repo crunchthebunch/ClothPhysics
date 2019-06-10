@@ -591,6 +591,9 @@
     <ClCompile Include="fan.cpp">
       <Filter>Source Files\ClothProject</Filter>
     </ClCompile>
+    <ClCompile Include="INIParser.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assetloader.h">
@@ -1408,6 +1411,9 @@
     </ClInclude>
     <ClInclude Include="fan.h">
       <Filter>Header Files\ClothProject</Filter>
+    </ClInclude>
+    <ClInclude Include="INIParser.h">
+      <Filter>Header Files\Framework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

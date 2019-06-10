@@ -330,6 +330,7 @@
     <ClCompile Include="fan.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gameobject.cpp" />
+    <ClCompile Include="INIParser.cpp" />
     <ClCompile Include="meshsphere.cpp" />
     <ClCompile Include="physicslevel.cpp" />
     <ClCompile Include="grass.cpp" />
@@ -602,6 +603,7 @@
     <ClInclude Include="fan.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gameobject.h" />
+    <ClInclude Include="INIParser.h" />
     <ClInclude Include="physicslevel.h" />
     <ClInclude Include="grass.h" />
     <ClInclude Include="inputmanager.h" />

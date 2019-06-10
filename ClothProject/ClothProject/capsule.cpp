@@ -40,7 +40,6 @@ void Capsule::Initialise()
 	colShape = new btCapsuleShape(2.0f, 6.0f);
 	physics->GetCollisionShapes()->push_back(colShape);
 
-	btTransform startTransform;
 	startTransform.setIdentity();
 
 	btScalar mass(1.0f);
@@ -124,4 +123,11 @@ void Capsule::MousePressing()
 {
 	//Pick up cube and place in front of camera
 	isHeld = true;
+}
+
+void Capsule::Reset()
+{
+	body->setAngularVelocity(btVector3(0.0f, 0.0f, 0.0f));
+	body->setLinearVelocity(btVector3(0.0f, 0.0f, 0.0f));
+	body->setWorldTransform(startTransform);
 }
