@@ -84,9 +84,6 @@ void PhysicsLevel::Initialise(Game * _myGame, ShaderLoader * _shaderloader, Asse
 	//Init Mouse Picker
 	mousePicker = new MousePicker(this, &vecPickable);
 
-	//Init Input Manager
-	//inputManager = new InputManager();
-
 	//Init Clock
 	clock = new Clock();
 	clock->Initialise();
@@ -187,6 +184,7 @@ void PhysicsLevel::Update()
 
 	//Camera
 	ControlCamera(); //Move the camera using WASD
+	//ProcessInput();
 
 	//Compute Views
 	levelCamera->ComputeView();
@@ -234,32 +232,84 @@ void PhysicsLevel::Update()
 		isHolding = false;
 	}
 
-	//static bool wToggle = true;
-	//static float wToggleDelay = 0.0f;
+	static bool wToggle = true;
+	static float wToggleDelay = 0.0f;
 
-	////Toggle WireFrame
-	//if ((inputManager->GetKeyState('t') == KEY_DOWN || inputManager->GetKeyState('T') == KEY_DOWN) && wToggle == true)
-	//{
-	//	if (isWireframe == false)
-	//	{
-	//		isWireframe = true;
-	//	}
-	//	else
-	//	{
-	//		isWireframe = false;
-	//	}
-	//	wToggle = false;
-	//}
+	//Toggle WireFrame
+	if (inputManager->GetKeyState('l') == KEY_DOWN)
+	{
+		if (wToggle == true)
+		{
+			cout << "DETECTED" << endl;
+			int temp = cloth->getNumCols();
+			temp += 1;
+			cloth->setNumCols(temp);
+			wToggle = false;
+		}
 
-	//if (wToggle == false)
-	//{
-	//	wToggleDelay += 1.0f * (float)clock->GetDeltaTick();
-	//	if (wToggleDelay >= 0.2f)
-	//	{
-	//		wToggle = true;
-	//		wToggleDelay = 0.0f;
-	//	}
-	//}
+	}
+
+	if (inputManager->GetKeyState('j') == KEY_DOWN)
+	{
+		if (wToggle == true)
+		{
+			cout << "DETECTED" << endl;
+			int temp = cloth->getNumCols();
+			temp -= 1;
+			cloth->setNumCols(temp);
+			wToggle = false;
+		}
+	}
+
+	if (inputManager->GetKeyState('i') == KEY_DOWN)
+	{
+		if (wToggle == true)
+		{
+			cout << "DETECTED" << endl;
+			int temp = cloth->getNumRows();
+			temp += 1;
+			cloth->setNumRows(temp);
+			wToggle = false;
+		}
+	}
+
+	if (inputManager->GetKeyState('k') == KEY_DOWN)
+	{
+		if (wToggle == true)
+		{
+			cout << "DETECTED" << endl;
+			int temp = cloth->getNumRows();
+			temp -= 1;
+			cloth->setNumRows(temp);
+			wToggle = false;
+		}
+	}
+
+	if (inputManager->GetKeyState('r') == KEY_DOWN)
+	{
+		if (wToggle == true)
+		{
+			cout << "DETECTED" << endl;
+			//delete(cloth);
+
+			cloth = new Cloth(this, physicsManager);
+			cloth->SetVecPickable(&vecPickable);
+			cloth->SetY(50.0f);
+			cloth->Initialise();
+			//vecObjects.push_back(cloth);
+			wToggle = false;
+		}
+	}
+
+	if (wToggle == false)
+	{
+		wToggleDelay += 1.0f * (float)clock->GetDeltaTick();
+		if (wToggleDelay >= 0.2f)
+		{
+			wToggle = true;
+			wToggleDelay = 0.0f;
+		}
+	}
 
 	glutPostRedisplay();
 }
@@ -349,28 +399,41 @@ void PhysicsLevel::ControlCamera()
 
 void PhysicsLevel::ProcessInput()
 {
+	if (inputManager->GetKeyState('l') == KEY_DOWN)
+	{
+		if (buttonPressed == false)
+		{
+			cout << "DETECTED" << endl;
+			int temp = cloth->getNumCols();
+			temp += 1;
+			cloth->setNumCols(temp);
+			buttonPressed = true;
+		}
+
+	}
+
+	if (inputManager->GetKeyState('j') == KEY_DOWN)
+	{
+		cout << "DETECTED" << endl;
+		int temp = cloth->getNumCols();
+		temp -= 1;
+		cloth->setNumCols(temp);
+	}
+
 	if (inputManager->GetKeyState('i') == KEY_DOWN)
 	{
-		int temp = cloth->getNumCols();
-		cloth->setNumCols(temp++);
+		cout << "DETECTED" << endl;
+		int temp = cloth->getNumRows();
+		temp += 1;
+		cloth->setNumRows(temp);
 	}
 
 	if (inputManager->GetKeyState('k') == KEY_DOWN)
 	{
-		int temp = cloth->getNumCols();
-		cloth->setNumCols(temp--);
-	}
-
-	if (inputManager->GetKeyState(GLUT_KEY_LEFT) == KEY_DOWN)
-	{
+		cout << "DETECTED" << endl;
 		int temp = cloth->getNumRows();
-		cloth->setNumRows(temp++);
-	}
-
-	if (inputManager->GetKeyState(GLUT_KEY_RIGHT) == KEY_DOWN)
-	{
-		int temp = cloth->getNumRows();
-		cloth->setNumRows(temp--);
+		temp -= 1;
+		cloth->setNumRows(temp);
 	}
 
 	if (inputManager->GetKeyState('r') == KEY_UP)

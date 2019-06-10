@@ -29,6 +29,8 @@ public:
 
 	void ResetLevel();
 
+	bool buttonPressed;
+
 private:
 	PhysicsManager* physicsManager;
 

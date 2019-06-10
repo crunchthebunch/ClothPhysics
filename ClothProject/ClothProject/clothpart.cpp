@@ -205,7 +205,7 @@ void ClothPart::SetParts()
 
 void ClothPart::InitQuad()
 {
-	texture = assetLoader->CreateTexture("Assets/clothTexture.png", "clothTexture");
+	texture = assetLoader->CreateTexture("Assets/clothTexture.jpg", "clothTexture");
 	program = shaderLoader->CreateProgram("Assets/ClothVert.vs", "Assets/ClothFrag.fs", "clothVert", "clothFrag");
 
 	//VBO
